@@ -4,11 +4,10 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 	"pix-generation/src/client"
 	"pix-generation/src/handler"
 	"pix-generation/src/middleware"
-
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -32,13 +31,15 @@ func main() {
 	r := gin.Default()
 
 	r.POST("/login", handler.ValidateUser)
+	r.POST("/register", handler.CreateUser)
 
 	protected := r.Group("/", middleware.JWTMiddleware())
 	{
-		protected.POST("/invoice", handler.UpdateInvoice)
-		protected.GET("/invoice/:id", handler.GetInvoice)
-		protected.GET("/invoice/:startDate/:endDate/", handler.GetInvoice)
-		protected.DELETE("/invoice", handler.DeleteInvoice)
+		protected.POST("/invoice", handler.CreateInvoice)
+		protected.GET("/invoice/id/:id", handler.GetByID)
+		protected.POST("/invoice/:startDate/:endDate/", handler.GetByCnpj)
+		protected.POST("/invoice/cnpj", handler.GetByCnpj)
+		protected.DELETE("/invoice/:startDate/:endDate/", handler.DeleteInvoice)
 
 	}
 

@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"errors"
-	"fmt"
 	"sync"
 
 	"pix-generation/src/client"
@@ -48,7 +47,6 @@ func (ru *repositoryInvoice) FindOne(ctx context.Context, collName string, query
 
 	var Invoice model.Invoice
 	result, err := client.GetInstance().FindOne(ctx, collName, query)
-	fmt.Println(result)
 	if err != nil {
 		return Invoice, errors.New("Error Repository: Error find query in mongoDb")
 	}

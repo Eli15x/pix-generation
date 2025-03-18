@@ -1,4 +1,4 @@
-module github.com/Eli15x/pix-generation
+module pix-generation
 
 go 1.21.1
 

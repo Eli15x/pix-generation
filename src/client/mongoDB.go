@@ -1,4 +1,4 @@
-//This example uses the ORM jet
+// This example uses the ORM jet
 package client
 
 import (
@@ -26,6 +26,7 @@ type MongoDB interface {
 	Count(ctx context.Context, collName string, query map[string]interface{}) (int64, error)
 	UpdateOne(ctx context.Context, collName string, query map[string]interface{}, doc interface{}) (*mongo.UpdateResult, error)
 	Remove(ctx context.Context, collName string, query map[string]interface{}) error
+	RemoveMany(ctx context.Context, collName string, selector map[string]interface{}) error
 	WithTransaction(ctx context.Context, fn func(context.Context) error) error
 	Initialize(ctx context.Context) error
 	Ping(ctx context.Context) error
@@ -130,6 +131,12 @@ func (m *mongodbImpl) UpdateOne(ctx context.Context, collName string, selector m
 // Remove one or more documents in the collection
 func (m *mongodbImpl) Remove(ctx context.Context, collName string, selector map[string]interface{}) error {
 	_, err := m.client.Database(m.dbName).Collection(collName).DeleteOne(ctx, selector)
+	return err
+}
+
+// remve Many
+func (m *mongodbImpl) RemoveMany(ctx context.Context, collName string, selector map[string]interface{}) error {
+	_, err := m.client.Database(m.dbName).Collection(collName).DeleteMany(ctx, selector)
 	return err
 }
 

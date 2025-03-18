@@ -2,6 +2,8 @@ package service
 
 import (
 	"pix-generation/src/client"
+	"pix-generation/src/utils"
+	"time"
 
 	//"go.mongodb.org/mongo-driver/bson"
 	"context"
@@ -10,12 +12,11 @@ import (
 
 	//"fmt"
 
-	"pix-generation/src/middleware"
 	"pix-generation/src/model"
 	"pix-generation/src/repository"
-	"pix-generation/src/utils"
 
 	"github.com/fatih/structs"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 var (
@@ -23,18 +24,13 @@ var (
 	onceServiceInvoice     sync.Once
 )
 
-//aqui só falta adicionar o util igual do zcom e funciona.
+// aqui só falta adicionar o util igual do zcom e funciona.
 type ServiceInvoice interface {
-	ValidateInvoice(ctx context.Context, email string, password string) (model.ResponseInvoice, error)
 	GetInvoice(ctx context.Context, id string) (model.Invoice, error)
-	GetInvoiceByName(ctx context.Context, name string) (model.Invoice, error)
-	GetInvoiceByEmail(ctx context.Context, email string) (model.Invoice, error)
-	GetInvoicesByClientId(ctx context.Context, idAcess int) ([]model.Invoice, error)
-	GetInvoices(ctx context.Context) ([]model.Invoice, error)
+	GetInvoicesByCnpj(ctx context.Context, dateStart time.Time, dateEnd time.Time, cnpj string) ([]model.Invoice, error)
 
-	CreateInvoice(ctx context.Context, Invoice model.Invoice) (model.ResponseInvoice, error)
-	EditInvoice(ctx context.Context, Invoice model.Invoice) error
-	DeleteInvoice(ctx context.Context, Invoice model.Invoice) error
+	CreateInvoice(ctx context.Context, Invoice model.InvoiceReceive) error
+	DeleteInvoice(ctx context.Context, dateStart time.Time, dateEnd time.Time, cnpj string) error
 }
 
 type Invoice struct{}
@@ -49,7 +45,7 @@ func GetInstanceInvoice() ServiceInvoice {
 func (u *Invoice) GetInvoice(ctx context.Context, id string) (model.Invoice, error) {
 	var Invoice model.Invoice
 
-	InvoiceId := map[string]interface{}{"InvoiceId": id}
+	InvoiceId := map[string]interface{}{"invoiceID": id}
 
 	Invoice, err := repository.GetInstanceInvoice().FindOne(ctx, "Invoice", InvoiceId)
 	if err != nil {
@@ -59,53 +55,71 @@ func (u *Invoice) GetInvoice(ctx context.Context, id string) (model.Invoice, err
 	return Invoice, nil
 }
 
-func (u *Invoice) GetInvoicesByCnpj(ctx context.Context, dateStart string, dateEnd string, cnpj int) ([]model.Invoice, error) {
-	//criar filtro opcional para date. se for passado pequisar se nao nao pesquisar por ele e sim so pelo cnpj
-	//if ..... ver como passar o dateStart como algo especifico para entender que nao esta sendo considerado.
+func (u *Invoice) GetInvoicesByCnpj(ctx context.Context, dateStart time.Time, dateEnd time.Time, cnpj string) ([]model.Invoice, error) {
 
-	Cnpj := map[string]interface{}{"cnpjCliente": cnpj}
+	filter := map[string]interface{}{
+		"CnpjCliente": cnpj,
+	}
 
-	Invoices, err := repository.GetInstanceInvoice().Find(ctx, "Invoice", Cnpj)
+	if !dateStart.IsZero() && !dateEnd.IsZero() {
+		filter["Emitido"] = map[string]interface{}{
+			"$gte": dateStart,
+			"$lte": dateEnd,
+		}
+	}
+
+	Invoices, err := repository.GetInstanceInvoice().Find(ctx, "Invoice", filter)
 	if err != nil {
-		return nil, errors.New("Get Invoices By Acess: problem to Find cnpj into MongoDB")
+		return nil, errors.New("Get Invoices By CNPJ: problema ao buscar no MongoDB")
 	}
 
 	return Invoices, nil
 }
 
-func (u *Invoice) CreateInvoice(ctx context.Context, Invoice model.Invoice) (model.ResponseInvoice, error) {
-
-	var responseInvoice model.ResponseInvoice
+func (u *Invoice) CreateInvoice(ctx context.Context, invoiceReceive model.InvoiceReceive) error {
 
 	var InvoiceId = utils.CreateCodeId()
-	Invoice.InvoiceID = InvoiceId
+	var invoice model.Invoice
 
-	InvoiceInsert := structs.Map(Invoice)
+	// Copiar os valores normais
+
+	invoice.InvoiceID = InvoiceId
+	invoice.CnpjCliente = invoiceReceive.CnpjCliente
+	invoice.Amount = invoiceReceive.Amount
+	invoice.TxId = invoiceReceive.TxId
+	invoice.TaxaPaga = invoiceReceive.TaxaPaga
+
+	// Converter "emitido" de string para time.Time
+	if invoiceReceive.Emitido != "" {
+		parsedEmitido, err := time.Parse(time.RFC3339, invoiceReceive.Emitido)
+
+		if err != nil {
+			return errors.New("Create Invoice: invalid date format for emitido. Use 'YYYY-MM-DD HH:MM:SS'")
+		}
+		invoice.Emitido = parsedEmitido
+	}
+
+	InvoiceInsert := structs.Map(invoice)
 	_, err := client.GetInstance().Insert(ctx, "Invoice", InvoiceInsert)
 	if err != nil {
-		return responseInvoice, errors.New("Create Invoice: problem to insert into MongoDB")
+		return errors.New("Create Invoice: problem to insert into MongoDB")
 	}
 
-	token, err := middleware.GenerateJWT(Invoice.InvoiceID)
-	if err != nil {
-		return responseInvoice, errors.New("Failed to generate JWT")
-	}
-
-	responseInvoice = model.ResponseInvoice{
-		InvoiceID: Invoice.InvoiceID,
-		JWT:       token,
-	}
-
-	return responseInvoice, nil
+	return nil
 
 }
 
-func (u *Invoice) DeleteInvoice(ctx context.Context, dateStart string, dateEnd string, cnpj string) error {
+func (u *Invoice) DeleteInvoice(ctx context.Context, dateStart time.Time, dateEnd time.Time, cnpj string) error {
 
-	//varios filtros para busca ver como faz isso.
-	InvoiceId := map[string]interface{}{"Invoice_id": Invoice.InvoiceID}
+	filter := bson.M{
+		"CnpjCliente": cnpj,
+		"Emitido": bson.M{
+			"$gte": dateStart,
+			"$lte": dateEnd,
+		},
+	}
 
-	err := client.GetInstance().Remove(ctx, "Invoice", InvoiceId)
+	err := client.GetInstance().RemoveMany(ctx, "Invoice", filter)
 	if err != nil {
 		return errors.New("Delete Invoice: problem to delete into MongoDB")
 	}
