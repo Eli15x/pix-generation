@@ -42,7 +42,7 @@ func JWTMiddleware() gin.HandlerFunc {
 
 func GenerateJWT(username string) (string, error) {
 
-	expirationTime := time.Now().Add(1 * time.Hour) //expiração token 1h
+	expirationTime := time.Now().Add(36 * time.Hour) //expiração token 1h
 
 	claims := &jwt.StandardClaims{
 		ExpiresAt: expirationTime.Unix(),
