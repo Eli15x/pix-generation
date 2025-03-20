@@ -25,7 +25,7 @@ var (
 	onceServiceUser     sync.Once
 )
 
-//aqui só falta adicionar o util igual do zcom e funciona.
+// aqui só falta adicionar o util igual do zcom e funciona.
 type ServiceUser interface {
 	ValidateUser(ctx context.Context, email string, password string) (model.ResponseUser, error)
 	GetUser(ctx context.Context, id string) (model.User, error)
@@ -175,7 +175,7 @@ func (u *user) CreateUser(ctx context.Context, user model.User) (model.ResponseU
 
 func (u *user) EditUser(ctx context.Context, user model.User) error {
 	userUpdate := structs.Map(user)
-	userId := map[string]interface{}{"user_id": user.UserID}
+	userId := map[string]interface{}{"Email": user.Email}
 	change := bson.M{"$set": userUpdate}
 
 	_, err := client.GetInstance().UpdateOne(ctx, "user", userId, change)

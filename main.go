@@ -40,6 +40,10 @@ func main() {
 		protected.POST("/invoice/:startDate/:endDate/", handler.GetByCnpj)
 		protected.POST("/invoice/cnpj", handler.GetByCnpj)
 		protected.DELETE("/invoice/:startDate/:endDate/", handler.DeleteInvoice)
+		protected.GET("/user", handler.GetUserByID)
+		protected.PUT("/user", handler.UpdateUser)
+		protected.DELETE("/user", handler.DeleteUser)
+		protected.GET("/users", handler.GetAllUsers)
 
 	}
 
