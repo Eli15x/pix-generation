@@ -88,13 +88,16 @@ func (u *Invoice) CreateInvoice(ctx context.Context, invoiceReceive model.Invoic
 	invoice.Amount = invoiceReceive.Amount
 	invoice.TxId = invoiceReceive.TxId
 	invoice.TaxaPaga = invoiceReceive.TaxaPaga
+	invoice.Expira = invoiceReceive.Expira
+	invoice.Uuid = invoiceReceive.Uuid
+	invoice.Pago = invoiceReceive.Pago
 
 	// Converter "emitido" de string para time.Time
 	if invoiceReceive.Emitido != "" {
-		parsedEmitido, err := time.Parse(time.RFC3339, invoiceReceive.Emitido)
+		parsedEmitido, err := time.Parse("2006-01-02T15:04:05", invoiceReceive.Emitido)
 
 		if err != nil {
-			return errors.New("Create Invoice: invalid date format for emitido. Use 'YYYY-MM-DD HH:MM:SS'")
+			return errors.New("Create Invoice: invalid date format for emitido. Use 'YYYY-MM-DDTHH:MM:SS'")
 		}
 		invoice.Emitido = parsedEmitido
 	}
