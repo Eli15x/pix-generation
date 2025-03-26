@@ -187,7 +187,7 @@ func (u *user) EditUser(ctx context.Context, user model.User) error {
 
 func (u *user) DeleteUser(ctx context.Context, user model.User) error {
 
-	userId := map[string]interface{}{"user_id": user.UserID}
+	userId := map[string]interface{}{"document": user.UserID}
 
 	err := client.GetInstance().Remove(ctx, "user", userId)
 	if err != nil {
