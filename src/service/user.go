@@ -1,7 +1,9 @@
 package service
 
 import (
+	"fmt"
 	"pix-generation/src/client"
+	"time"
 
 	//"go.mongodb.org/mongo-driver/bson"
 	"context"
@@ -149,6 +151,8 @@ func (u *user) CreateUser(ctx context.Context, user model.User) (model.ResponseU
 	var responseUser model.ResponseUser
 	passwordEncrypt := utils.Encrypt(user.Password)
 	user.Password = passwordEncrypt
+	user.CreatedAt = time.Now()
+	user.UpdatedAt = time.Now()
 
 	var userId = utils.CreateCodeId()
 	user.UserID = userId
@@ -174,14 +178,35 @@ func (u *user) CreateUser(ctx context.Context, user model.User) (model.ResponseU
 }
 
 func (u *user) EditUser(ctx context.Context, user model.User) error {
-	userUpdate := structs.Map(user)
-	userId := map[string]interface{}{"Email": user.Email}
-	change := bson.M{"$set": userUpdate}
+	var existingUser model.User
+	filter := bson.M{"Email": user.Email}
 
-	_, err := client.GetInstance().UpdateOne(ctx, "user", userId, change)
+	emailValidate := map[string]interface{}{"Email": user.Email}
+	existingUser, err := repository.GetInstanceUser().FindOne(ctx, "user", emailValidate)
+	if err != nil {
+		return errors.New("Edit User: could not find existing user")
+	}
+
+	if user.Password != "" {
+		newEncrypted := utils.Encrypt(user.Password)
+		if newEncrypted != existingUser.Password {
+			user.Password = newEncrypted
+		} else {
+			user.Password = existingUser.Password
+		}
+	}
+
+	user.UpdatedAt = time.Now()
+	userUpdate := structs.Map(user)
+	filteredUpdate := cleanMap(userUpdate)
+	change := bson.M{"$set": filteredUpdate}
+
+	fmt.Println(change)
+	_, err = client.GetInstance().UpdateOne(ctx, "user", filter, change)
 	if err != nil {
 		return errors.New("Edit User: problem to update into MongoDB")
 	}
+
 	return nil
 }
 
@@ -195,4 +220,25 @@ func (u *user) DeleteUser(ctx context.Context, user model.User) error {
 	}
 
 	return nil
+}
+
+func cleanMap(m map[string]interface{}) map[string]interface{} {
+	cleaned := make(map[string]interface{})
+	for k, v := range m {
+		// Ignora campos vazios, zero ou nil
+		if v == nil {
+			continue
+		}
+		// Ignora strings vazias
+		if str, ok := v.(string); ok && str == "" {
+			continue
+		}
+		// Ignora datas zero
+		if t, ok := v.(time.Time); ok && t.IsZero() {
+			continue
+		}
+		// TODO: adicionar mais filtros se precisar
+		cleaned[k] = v
+	}
+	return cleaned
 }

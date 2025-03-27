@@ -9,13 +9,13 @@ import (
 type User struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
 	UserID    string             `bson:"user_id,omitempty" json:"user_id,omitempty"`
-	ClientID  string             `bson:"client_id" json:"client_id"`
-	Document  string             `bson:"document" json:"document"`
-	AcessID   string             `bson:"acess_id" json:"acess_id"`
-	Name      string             `bson:"name" json:"name"`
-	Email     string             `bson:"email" json:"email"`
-	Password  string             `bson:"password" json:"password"`
-	CreatedAt time.Time          `bson:"createdAt" json:"createdAt"`
+	ClientID  string             `bson:"ClientID" json:"client_id"`
+	Document  string             `bson:"Document" json:"document"`
+	AcessID   string             `bson:"AcessID" json:"acess_id"`
+	Name      string             `bson:"Name" json:"name"`
+	Email     string             `bson:"Email" json:"email"`
+	Password  string             `bson:"Password" json:"password"`
+	CreatedAt time.Time          `bson:"CreatedAt" json:"createdAt"`
 	UpdatedAt time.Time          `bson:"UpdatedAt" json:"UpdatedAt"`
 }
 
