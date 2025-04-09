@@ -31,3 +31,15 @@ type InvoiceReceive struct {
 	TxId        string  `bson:"txId" json:"txId"`
 	TaxaPaga    bool    `bson:"taxaPaga" json:"taxaPaga"`
 }
+
+type InvoiceIDRequest struct {
+	InvoiceID string `json:"invoice_id" example:"INV-123456"`
+}
+
+type InvoiceCNPJRequest struct {
+	CnpjCliente string `json:"cnpj_cliente" example:"12345678000199"`
+}
+
+type InvoiceDeleteRequest struct {
+	InvoiceID string `bson:"invoiceID,omitempty" json:"invoiceID,omitempty"`
+}

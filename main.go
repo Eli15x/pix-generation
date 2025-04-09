@@ -2,37 +2,53 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
-	"pix-generation/src/client"
-	"pix-generation/src/handler"
-	"pix-generation/src/middleware"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	// importa o pacote para ativar o init()
+	_ "pix-generation/docs"
+	"pix-generation/src/client"
+	"pix-generation/src/handler"
+	"pix-generation/src/middleware"
 )
 
+// @title           Pix Generation API
+// @version         1.0
+// @description     API para controle de usuários e invoices com autenticação JWT.
+// @termsOfService  http://swagger.io/terms/
+// @license.name    Konachse
+// @host            localhost:9090
+// @BasePath        /
 func main() {
-
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-
-	err := godotenv.Load(".env")
-	if err != nil {
-		fmt.Errorf("Error loading .env file")
-	}
-
 	defer cancel()
 
-	if err := client.GetInstance().Initialize(ctx); err != nil {
-		fmt.Errorf("mongo off")
+	// Carrega variáveis de ambiente
+	if err := godotenv.Load(".env"); err != nil {
+		log.Println("Aviso: .env não carregado ou inexistente")
 	}
 
+	// Inicializa MongoDB
+	if err := client.GetInstance().Initialize(ctx); err != nil {
+		log.Fatalf("Erro ao conectar no MongoDB: %v", err)
+	}
+
+	// Inicia o Gin
 	r := gin.Default()
 
+	// Rota da documentação Swagger
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// Rotas públicas
 	r.POST("/login", handler.ValidateUser)
 	r.POST("/register", handler.CreateUser)
 
+	// Rotas protegidas com JWT
 	protected := r.Group("/", middleware.JWTMiddleware())
 	{
 		protected.POST("/invoice", handler.CreateInvoice)
@@ -44,9 +60,9 @@ func main() {
 		protected.PUT("/user", handler.UpdateUser)
 		protected.DELETE("/user", handler.DeleteUser)
 		protected.GET("/users", handler.GetAllUsers)
-
 	}
 
+	// Inicia servidor na porta 9090
 	if err := r.Run(":9090"); err != nil {
 		log.Fatal(err)
 	}

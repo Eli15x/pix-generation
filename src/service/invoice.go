@@ -30,7 +30,8 @@ type ServiceInvoice interface {
 	GetInvoicesByCnpj(ctx context.Context, dateStart time.Time, dateEnd time.Time, cnpj string) ([]model.Invoice, error)
 
 	CreateInvoice(ctx context.Context, Invoice model.InvoiceReceive) error
-	DeleteInvoice(ctx context.Context, dateStart time.Time, dateEnd time.Time, cnpj string) error
+	DeleteInvoiceByData(ctx context.Context, dateStart time.Time, dateEnd time.Time, cnpj string) error
+	DeleteInvoice(ctx context.Context, invoiceId string) error
 }
 
 type Invoice struct{}
@@ -42,7 +43,7 @@ func GetInstanceInvoice() ServiceInvoice {
 	return instanceServiceInvoice
 }
 
-func (u *Invoice) GetInvoice(ctx context.Context, id string) (model.Invoice, error) {
+func (i *Invoice) GetInvoice(ctx context.Context, id string) (model.Invoice, error) {
 	var Invoice model.Invoice
 
 	InvoiceId := map[string]interface{}{"invoiceID": id}
@@ -55,7 +56,7 @@ func (u *Invoice) GetInvoice(ctx context.Context, id string) (model.Invoice, err
 	return Invoice, nil
 }
 
-func (u *Invoice) GetInvoicesByCnpj(ctx context.Context, dateStart time.Time, dateEnd time.Time, cnpj string) ([]model.Invoice, error) {
+func (i *Invoice) GetInvoicesByCnpj(ctx context.Context, dateStart time.Time, dateEnd time.Time, cnpj string) ([]model.Invoice, error) {
 
 	filter := map[string]interface{}{
 		"CnpjCliente": cnpj,
@@ -76,7 +77,7 @@ func (u *Invoice) GetInvoicesByCnpj(ctx context.Context, dateStart time.Time, da
 	return Invoices, nil
 }
 
-func (u *Invoice) CreateInvoice(ctx context.Context, invoiceReceive model.InvoiceReceive) error {
+func (i *Invoice) CreateInvoice(ctx context.Context, invoiceReceive model.InvoiceReceive) error {
 
 	var InvoiceId = utils.CreateCodeId()
 	var invoice model.Invoice
@@ -112,7 +113,7 @@ func (u *Invoice) CreateInvoice(ctx context.Context, invoiceReceive model.Invoic
 
 }
 
-func (u *Invoice) DeleteInvoice(ctx context.Context, dateStart time.Time, dateEnd time.Time, cnpj string) error {
+func (i *Invoice) DeleteInvoiceByData(ctx context.Context, dateStart time.Time, dateEnd time.Time, cnpj string) error {
 
 	filter := bson.M{
 		"CnpjCliente": cnpj,
@@ -123,6 +124,18 @@ func (u *Invoice) DeleteInvoice(ctx context.Context, dateStart time.Time, dateEn
 	}
 
 	err := client.GetInstance().RemoveMany(ctx, "Invoice", filter)
+	if err != nil {
+		return errors.New("Delete Invoice by data: problem to delete into MongoDB")
+	}
+
+	return nil
+}
+
+func (i *Invoice) DeleteInvoice(ctx context.Context, invoiceId string) error {
+
+	invoiceIdValue := map[string]interface{}{"InvoiceID": invoiceId}
+
+	err := client.GetInstance().Remove(ctx, "invoice", invoiceIdValue)
 	if err != nil {
 		return errors.New("Delete Invoice: problem to delete into MongoDB")
 	}

@@ -38,7 +38,7 @@ type ServiceUser interface {
 
 	CreateUser(ctx context.Context, user model.User) (model.ResponseUser, error)
 	EditUser(ctx context.Context, user model.User) error
-	DeleteUser(ctx context.Context, user model.User) error
+	DeleteUser(ctx context.Context, document string) error
 }
 
 type user struct{}
@@ -153,7 +153,6 @@ func (u *user) CreateUser(ctx context.Context, user model.User) (model.ResponseU
 	user.Password = passwordEncrypt
 	user.CreatedAt = time.Now()
 	user.UpdatedAt = time.Now()
-
 	var userId = utils.CreateCodeId()
 	user.UserID = userId
 
@@ -210,11 +209,11 @@ func (u *user) EditUser(ctx context.Context, user model.User) error {
 	return nil
 }
 
-func (u *user) DeleteUser(ctx context.Context, user model.User) error {
+func (u *user) DeleteUser(ctx context.Context, document string) error {
 
-	userId := map[string]interface{}{"document": user.UserID}
+	documentId := map[string]interface{}{"Document": document}
 
-	err := client.GetInstance().Remove(ctx, "user", userId)
+	err := client.GetInstance().Remove(ctx, "user", documentId)
 	if err != nil {
 		return errors.New("Delete User: problem to delete into MongoDB")
 	}
@@ -237,7 +236,7 @@ func cleanMap(m map[string]interface{}) map[string]interface{} {
 		if t, ok := v.(time.Time); ok && t.IsZero() {
 			continue
 		}
-		// TODO: adicionar mais filtros se precisar
+
 		cleaned[k] = v
 	}
 	return cleaned
