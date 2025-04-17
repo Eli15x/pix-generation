@@ -15,6 +15,8 @@ import (
 	"pix-generation/src/client"
 	"pix-generation/src/handler"
 	"pix-generation/src/middleware"
+
+	"pix-generation/src/metrics"
 )
 
 // @title           Pix Generation API
@@ -40,6 +42,11 @@ func main() {
 
 	// Inicia o Gin
 	r := gin.Default()
+
+	//Prometheus
+	metrics.Init()
+	r.Use(metrics.PrometheusMiddleware())
+	r.GET("/metrics", metrics.PrometheusHandler())
 
 	// Rota da documentação Swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
