@@ -20,6 +20,10 @@ A API conta com documentação interativa via Swagger, facilitando testes e ente
 docker-compose build --no-cache
 porta da aplicação: 9090
 
+## Acesso Grafana
+
+porta: 3000
+
 ## Acesso Rotas
 
 para acessar swagger: /swagger/*any ex: /swagger/index.html
