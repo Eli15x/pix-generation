@@ -17,7 +17,7 @@ A API conta com documentação interativa via Swagger, facilitando testes e ente
 
 ## ⚙️ Como rodar o projeto
 
-docker-compose build --no-cache
+docker-compose up build 
 porta da aplicação: 9090
 
 ## Acesso Grafana

@@ -3,12 +3,21 @@ package handler
 import (
 	"context"
 	"net/http"
-
 	"pix-generation/src/model"
 	"pix-generation/src/service"
 
 	"github.com/gin-gonic/gin"
 )
+
+// UserHandler trata rotas relacionadas a usuários
+type UserHandler struct {
+	service service.ServiceUser
+}
+
+// NewUserHandler injeta a dependência do ServiceUser
+func NewUserHandler(s service.ServiceUser) *UserHandler {
+	return &UserHandler{service: s}
+}
 
 // ValidateUser godoc
 // @Summary      Valida usuário
@@ -20,29 +29,22 @@ import (
 // @Success      200   {object}  model.User
 // @Failure      400   {string}  string
 // @Router       /login [post]
-func ValidateUser(c *gin.Context) {
+func (h *UserHandler) ValidateUser(c *gin.Context) {
 	var user model.UserLoginRequest
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	if user.Email == "" {
-		c.String(http.StatusBadRequest, "Validate User Error: email not find")
+	if user.Email == "" || user.Password == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Email e senha são obrigatórios"})
 		return
 	}
 
-	if user.Password == "" {
-		c.String(http.StatusBadRequest, "Create User Error: password not find")
-		return
-	}
-
-	response, err := service.GetInstanceUser().ValidateUser(context.Background(), user.Email, user.Password)
+	response, err := h.service.ValidateUser(context.Background(), user.Email, user.Password)
 	if err != nil {
-		c.String(400, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusOK, response)
 }
 
@@ -57,14 +59,14 @@ func ValidateUser(c *gin.Context) {
 // @Failure      400   {object}  map[string]string
 // @Failure      500   {object}  map[string]string
 // @Router       /register [post]
-func CreateUser(c *gin.Context) {
+func (h *UserHandler) CreateUser(c *gin.Context) {
 	var user model.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	response, err := service.GetInstanceUser().CreateUser(context.Background(), user)
+	response, err := h.service.CreateUser(context.Background(), user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -84,14 +86,14 @@ func CreateUser(c *gin.Context) {
 // @Failure      400   {object}  map[string]string
 // @Failure      404   {object}  map[string]string
 // @Router       /user [get]
-func GetUserByID(c *gin.Context) {
+func (h *UserHandler) GetUserByID(c *gin.Context) {
 	var user model.UserIDRequest
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	userValue, err := service.GetInstanceUser().GetUser(context.Background(), user.UserID)
+	userValue, err := h.service.GetUser(context.Background(), user.UserID)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -111,20 +113,20 @@ func GetUserByID(c *gin.Context) {
 // @Failure      400   {object}  map[string]string
 // @Failure      500   {object}  map[string]string
 // @Router       /user [put]
-func UpdateUser(c *gin.Context) {
+func (h *UserHandler) UpdateUser(c *gin.Context) {
 	var user model.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	err := service.GetInstanceUser().EditUser(context.Background(), user)
+	err := h.service.EditUser(context.Background(), user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, "")
+	c.JSON(http.StatusOK, "Usuário atualizado")
 }
 
 // DeleteUser godoc
@@ -138,20 +140,20 @@ func UpdateUser(c *gin.Context) {
 // @Failure      400   {object}  map[string]string
 // @Failure      500   {object}  map[string]string
 // @Router       /user [delete]
-func DeleteUser(c *gin.Context) {
+func (h *UserHandler) DeleteUser(c *gin.Context) {
 	var user model.UserDeleteRequest
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	err := service.GetInstanceUser().DeleteUser(context.Background(), user.Document)
+	err := h.service.DeleteUser(context.Background(), user.Document)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": "User deleted"})
+	c.JSON(http.StatusOK, gin.H{"status": "Usuário deletado"})
 }
 
 // GetAllUsers godoc
@@ -163,8 +165,8 @@ func DeleteUser(c *gin.Context) {
 // @Success      200  {array}   model.User
 // @Failure      500  {object}  map[string]string
 // @Router       /users [get]
-func GetAllUsers(c *gin.Context) {
-	users, err := service.GetInstanceUser().GetUsers(context.Background())
+func (h *UserHandler) GetAllUsers(c *gin.Context) {
+	users, err := h.service.GetUsers(context.Background())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

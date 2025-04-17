@@ -15,6 +15,7 @@ import (
 	"pix-generation/src/client"
 	"pix-generation/src/handler"
 	"pix-generation/src/middleware"
+	"pix-generation/src/service"
 
 	"pix-generation/src/metrics"
 )
@@ -51,22 +52,29 @@ func main() {
 	// Rota da documentação Swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	userService := service.GetInstanceUser()
+	invoiceService := service.GetInstanceInvoice()
+
+	// Injeção dos handlers
+	userHandler := handler.NewUserHandler(userService)
+	invoiceHandler := handler.NewInvoiceHandler(invoiceService)
+
 	// Rotas públicas
-	r.POST("/login", handler.ValidateUser)
-	r.POST("/register", handler.CreateUser)
+	r.POST("/login", userHandler.ValidateUser)
+	r.POST("/register", userHandler.CreateUser)
 
 	// Rotas protegidas com JWT
 	protected := r.Group("/", middleware.JWTMiddleware())
 	{
-		protected.POST("/invoice", handler.CreateInvoice)
-		protected.GET("/invoice/id/:id", handler.GetByID)
-		protected.POST("/invoice/:startDate/:endDate/", handler.GetByCnpj)
-		protected.POST("/invoice/cnpj", handler.GetByCnpj)
-		protected.DELETE("/invoice/:startDate/:endDate/", handler.DeleteInvoice)
-		protected.GET("/user", handler.GetUserByID)
-		protected.PUT("/user", handler.UpdateUser)
-		protected.DELETE("/user", handler.DeleteUser)
-		protected.GET("/users", handler.GetAllUsers)
+		protected.POST("/invoice", invoiceHandler.CreateInvoice)
+		protected.GET("/invoice/id/:id", invoiceHandler.GetByID)
+		protected.POST("/invoice/:startDate/:endDate/", invoiceHandler.GetByCnpj)
+		protected.POST("/invoice/cnpj", invoiceHandler.GetByCnpj)
+		protected.DELETE("/invoice/:startDate/:endDate/", invoiceHandler.DeleteInvoice)
+		protected.GET("/user", userHandler.GetUserByID)
+		protected.PUT("/user", userHandler.UpdateUser)
+		protected.DELETE("/user", userHandler.DeleteUser)
+		protected.GET("/users", userHandler.GetAllUsers)
 	}
 
 	// Inicia servidor na porta 9090

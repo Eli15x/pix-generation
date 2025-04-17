@@ -11,6 +11,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// InvoiceHandler define o handler com injeção de dependência do service
+type InvoiceHandler struct {
+	service service.ServiceInvoice
+}
+
+// NewInvoiceHandler retorna um handler com o service injetado
+func NewInvoiceHandler(s service.ServiceInvoice) *InvoiceHandler {
+	return &InvoiceHandler{service: s}
+}
+
 // CreateInvoice godoc
 // @Summary      Cria uma nova fatura (Invoice)
 // @Description  Cria uma nova fatura a partir dos dados fornecidos
@@ -22,13 +32,13 @@ import (
 // @Failure      400      {object}  map[string]string
 // @Failure      500      {object}  map[string]string
 // @Router       /invoice [post]
-func CreateInvoice(c *gin.Context) {
-	var Invoice model.InvoiceReceive
-	if err := c.ShouldBindJSON(&Invoice); err != nil {
+func (h *InvoiceHandler) CreateInvoice(c *gin.Context) {
+	var invoice model.InvoiceReceive
+	if err := c.ShouldBindJSON(&invoice); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := service.GetInstanceInvoice().CreateInvoice(context.Background(), Invoice)
+	err := h.service.CreateInvoice(context.Background(), invoice)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -47,18 +57,18 @@ func CreateInvoice(c *gin.Context) {
 // @Failure      400      {object}  map[string]string
 // @Failure      404      {object}  map[string]string
 // @Router       /invoice/id/{id} [get]
-func GetByID(c *gin.Context) {
-	var Invoice model.InvoiceIDRequest
-	if err := c.ShouldBindJSON(&Invoice); err != nil {
+func (h *InvoiceHandler) GetByID(c *gin.Context) {
+	var invoice model.InvoiceIDRequest
+	if err := c.ShouldBindJSON(&invoice); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	InvoiceValue, err := service.GetInstanceInvoice().GetInvoice(context.Background(), Invoice.InvoiceID)
+	invoiceValue, err := h.service.GetInvoice(context.Background(), invoice.InvoiceID)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, InvoiceValue)
+	c.JSON(http.StatusOK, invoiceValue)
 }
 
 // GetByCnpj godoc
@@ -74,7 +84,7 @@ func GetByID(c *gin.Context) {
 // @Failure      400        {object}  map[string]string
 // @Failure      404        {object}  map[string]string
 // @Router       /invoice/{startDate}/{endDate}/ [post]
-func GetByCnpj(c *gin.Context) {
+func (h *InvoiceHandler) GetByCnpj(c *gin.Context) {
 	dateStartStr := c.Param("startDate")
 	dateEndStr := c.Param("endDate")
 
@@ -84,34 +94,29 @@ func GetByCnpj(c *gin.Context) {
 	if dateStartStr != "" && dateEndStr != "" {
 		dateStart, err = time.Parse("2006-01-02", dateStartStr)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Formato inválido para dateStart. Use YYYY-MM-DD"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Formato inválido para startDate. Use YYYY-MM-DD"})
 			return
 		}
 		dateEnd, err = time.Parse("2006-01-02", dateEndStr)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Formato inválido para dateEnd. Use YYYY-MM-DD"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Formato inválido para endDate. Use YYYY-MM-DD"})
 			return
 		}
 	}
 
-	if c.Request.Body == nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "O corpo da requisição está vazio"})
-		return
-	}
-
-	var InvoiceRecieve model.InvoiceCNPJRequest
-	if err := c.ShouldBindJSON(&InvoiceRecieve); err != nil {
+	var invoiceReceive model.InvoiceCNPJRequest
+	if err := c.ShouldBindJSON(&invoiceReceive); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	Invoices, err := service.GetInstanceInvoice().GetInvoicesByCnpj(context.Background(), dateStart, dateEnd, InvoiceRecieve.CnpjCliente)
+	invoices, err := h.service.GetInvoicesByCnpj(context.Background(), dateStart, dateEnd, invoiceReceive.CnpjCliente)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, Invoices)
+	c.JSON(http.StatusOK, invoices)
 }
 
 // DeleteInvoiceByData godoc
@@ -127,7 +132,7 @@ func GetByCnpj(c *gin.Context) {
 // @Failure      400        {object}  map[string]string
 // @Failure      500        {object}  map[string]string
 // @Router       /invoice/{startDate}/{endDate}/ [delete]
-func DeleteInvoiceByData(c *gin.Context) {
+func (h *InvoiceHandler) DeleteInvoiceByData(c *gin.Context) {
 	dateStartStr := c.Param("startDate")
 	dateEndStr := c.Param("endDate")
 
@@ -137,24 +142,14 @@ func DeleteInvoiceByData(c *gin.Context) {
 	if dateStartStr != "" && dateEndStr != "" {
 		dateStart, err = time.Parse("2006-01-02", dateStartStr)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Formato inválido para dateStart. Use YYYY-MM-DD"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Formato inválido para startDate. Use YYYY-MM-DD"})
 			return
 		}
 		dateEnd, err = time.Parse("2006-01-02", dateEndStr)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Formato inválido para dateEnd. Use YYYY-MM-DD"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Formato inválido para endDate. Use YYYY-MM-DD"})
 			return
 		}
-	}
-
-	if dateStart.IsZero() || dateEnd.IsZero() {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Os parâmetros dateStart e dateEnd são obrigatórios."})
-		return
-	}
-
-	if c.Request.Body == nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "O corpo da requisição está vazio"})
-		return
 	}
 
 	var invoice model.InvoiceCNPJRequest
@@ -163,7 +158,7 @@ func DeleteInvoiceByData(c *gin.Context) {
 		return
 	}
 
-	err = service.GetInstanceInvoice().DeleteInvoiceByData(context.Background(), dateStart, dateEnd, invoice.CnpjCliente)
+	err = h.service.DeleteInvoiceByData(context.Background(), dateStart, dateEnd, invoice.CnpjCliente)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -183,18 +178,18 @@ func DeleteInvoiceByData(c *gin.Context) {
 // @Failure      400      {object}  map[string]string
 // @Failure      500      {object}  map[string]string
 // @Router       /invoice [delete]
-func DeleteInvoice(c *gin.Context) {
+func (h *InvoiceHandler) DeleteInvoice(c *gin.Context) {
 	var invoice model.InvoiceDeleteRequest
 	if err := c.ShouldBindJSON(&invoice); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	err := service.GetInstanceInvoice().DeleteInvoice(context.Background(), invoice.InvoiceID)
+	err := h.service.DeleteInvoice(context.Background(), invoice.InvoiceID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": "User deleted"})
+	c.JSON(http.StatusOK, gin.H{"status": "Invoice deleted"})
 }
