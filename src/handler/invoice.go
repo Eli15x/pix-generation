@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 	"time"
 
@@ -38,7 +37,8 @@ func (h *InvoiceHandler) CreateInvoice(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.CreateInvoice(context.Background(), invoice)
+	ctx := c.Request.Context()
+	err := h.service.CreateInvoice(ctx, invoice)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -63,7 +63,8 @@ func (h *InvoiceHandler) GetByID(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	invoiceValue, err := h.service.GetInvoice(context.Background(), invoice.InvoiceID)
+	ctx := c.Request.Context()
+	invoiceValue, err := h.service.GetInvoice(ctx, invoice.InvoiceID)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -110,7 +111,8 @@ func (h *InvoiceHandler) GetByCnpj(c *gin.Context) {
 		return
 	}
 
-	invoices, err := h.service.GetInvoicesByCnpj(context.Background(), dateStart, dateEnd, invoiceReceive.CnpjCliente)
+	ctx := c.Request.Context()
+	invoices, err := h.service.GetInvoicesByCnpj(ctx, dateStart, dateEnd, invoiceReceive.CnpjCliente)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -158,7 +160,8 @@ func (h *InvoiceHandler) DeleteInvoiceByData(c *gin.Context) {
 		return
 	}
 
-	err = h.service.DeleteInvoiceByData(context.Background(), dateStart, dateEnd, invoice.CnpjCliente)
+	ctx := c.Request.Context()
+	err = h.service.DeleteInvoiceByData(ctx, dateStart, dateEnd, invoice.CnpjCliente)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -185,7 +188,8 @@ func (h *InvoiceHandler) DeleteInvoice(c *gin.Context) {
 		return
 	}
 
-	err := h.service.DeleteInvoice(context.Background(), invoice.InvoiceID)
+	ctx := c.Request.Context()
+	err := h.service.DeleteInvoice(ctx, invoice.InvoiceID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

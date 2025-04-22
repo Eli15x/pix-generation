@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 	"pix-generation/src/model"
 	"pix-generation/src/service"
@@ -40,7 +39,8 @@ func (h *UserHandler) ValidateUser(c *gin.Context) {
 		return
 	}
 
-	response, err := h.service.ValidateUser(context.Background(), user.Email, user.Password)
+	ctx := c.Request.Context()
+	response, err := h.service.ValidateUser(ctx, user.Email, user.Password)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -66,7 +66,8 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		return
 	}
 
-	response, err := h.service.CreateUser(context.Background(), user)
+	ctx := c.Request.Context()
+	response, err := h.service.CreateUser(ctx, user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -93,7 +94,8 @@ func (h *UserHandler) GetUserByID(c *gin.Context) {
 		return
 	}
 
-	userValue, err := h.service.GetUser(context.Background(), user.UserID)
+	ctx := c.Request.Context()
+	userValue, err := h.service.GetUser(ctx, user.UserID)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -120,7 +122,8 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	err := h.service.EditUser(context.Background(), user)
+	ctx := c.Request.Context()
+	err := h.service.EditUser(ctx, user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -147,7 +150,8 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 		return
 	}
 
-	err := h.service.DeleteUser(context.Background(), user.Document)
+	ctx := c.Request.Context()
+	err := h.service.DeleteUser(ctx, user.Document)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -166,7 +170,8 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 // @Failure      500  {object}  map[string]string
 // @Router       /users [get]
 func (h *UserHandler) GetAllUsers(c *gin.Context) {
-	users, err := h.service.GetUsers(context.Background())
+	ctx := c.Request.Context()
+	users, err := h.service.GetUsers(ctx)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
