@@ -7,18 +7,19 @@ import (
 )
 
 type User struct {
-	ID     primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	UserID string             `bson:"UserID,omitempty" json:"user_id,omitempty"`
-	//ClientID     string             `bson:"ClientID" json:"client_id"`
-	Document string `bson:"Document" json:"document"`
-	AcessID  string `bson:"AcessID" json:"acess_id"`
-	Name     string `bson:"Name" json:"name"`
-	Email    string `bson:"Email" json:"email"`
-	Password string `bson:"Password" json:"password"`
-	//	TaxaTotal    string             `bson:"TaxaTotal" json:"taxaTotal"`
-	//	TaxaFaltante string             `bson:"TaxaFaltante" json:"taxaFaltante"`
-	CreatedAt time.Time `bson:"CreatedAt" json:"createdAt"`
-	UpdatedAt time.Time `bson:"UpdatedAt" json:"UpdatedAt"`
+	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
+	UserID    string             `bson:"UserID,omitempty" json:"user_id,omitempty"`
+	Document  string             `bson:"Document" json:"document"`
+	Valid     bool               `bson:"Valid" json:"valid"`
+	Name      string             `bson:"Name" json:"name"`
+	Email     string             `bson:"Email" json:"email"`
+	Password  string             `bson:"Password" json:"password"`
+	CreatedAt time.Time          `bson:"CreatedAt" json:"createdAt"`
+	UpdatedAt time.Time          `bson:"UpdatedAt" json:"UpdatedAt"`
+
+	//TaxaTotal    	string             	`bson:"TaxaTotal" json:"taxaTotal"`
+	//TaxaFaltante 	string             	`bson:"TaxaFaltante" json:"taxaFaltante"`
+	//ClientID     	string            	`bson:"ClientID" json:"client_id"`
 }
 
 type ResponseUser struct {
