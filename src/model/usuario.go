@@ -1,0 +1,35 @@
+package model
+
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
+
+type Usuario struct {
+	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
+	UsuarioID string             `bson:"usuarioID" json:"usuario_id"`
+	Nome      string             `bson:"nome" json:"nome"`
+	Email     string             `bson:"email" json:"email"`
+	Senha     string             `bson:"senha" json:"senha"`
+	Nivel     int                `bson:"nivel" json:"nivel"`
+	Setor     string             `bson:"setor" json:"setor"`
+	Celular   string             `bson:"celular" json:"celular"`
+	Loja      string             `bson:"loja" json:"loja"`
+}
+
+type UsuarioReceive struct {
+	Nome    string `json:"nome" binding:"required"`
+	Email   string `json:"email" binding:"required"`
+	Senha   string `json:"senha" binding:"required"`
+	Nivel   int    `json:"nivel" binding:"required"`
+	Setor   string `json:"setor" binding:"required"`
+	Celular string `json:"celular" binding:"required"`
+	Loja    string `json:"loja" binding:"required"`
+}
+
+type UsuarioDeleteRequest struct {
+	UsuarioID string `json:"usuario_id" binding:"required"`
+}
+
+type UsuarioEmailRequest struct {
+	Email string `json:"email" binding:"required"`
+}

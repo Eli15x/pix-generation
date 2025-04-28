@@ -52,12 +52,21 @@ func main() {
 	// Rota da documentação Swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	// Injeção dos services
 	userService := service.GetInstanceUser()
 	invoiceService := service.GetInstanceInvoice()
+	emissorService := service.GetInstanceEmissor()
+	clientService := service.GetInstanceClient()
+	signatureService := service.GetInstanceSignature()
+	operacaoService := service.GetInstanceOperacao()
 
 	// Injeção dos handlers
 	userHandler := handler.NewUserHandler(userService)
 	invoiceHandler := handler.NewInvoiceHandler(invoiceService)
+	emissorHandler := handler.NewEmissorHandler(emissorService)
+	clientHandler := handler.NewClientHandler(clientService)
+	signatureHandler := handler.NewSignatureHandler(signatureService)
+	operacaoHandler := handler.NewOperacaoHandler(operacaoService)
 
 	// Rotas públicas
 	r.POST("/login", userHandler.ValidateUser)
@@ -71,10 +80,43 @@ func main() {
 		protected.POST("/invoice/:startDate/:endDate/", invoiceHandler.GetByCnpj)
 		protected.POST("/invoice/cnpj", invoiceHandler.GetByCnpj)
 		protected.DELETE("/invoice/:startDate/:endDate/", invoiceHandler.DeleteInvoice)
+
 		protected.GET("/user", userHandler.GetUserByID)
 		protected.PUT("/user", userHandler.UpdateUser)
 		protected.DELETE("/user", userHandler.DeleteUser)
 		protected.GET("/users", userHandler.GetAllUsers)
+
+		// Emissor
+		protected.POST("/emissor", emissorHandler.CreateEmissor)
+		protected.GET("/emissor/id/:id", emissorHandler.GetEmissorByID)
+		protected.GET("/emissor", emissorHandler.GetAllEmissor)
+		protected.PUT("/emissor/id/:id", emissorHandler.UpdateEmissor)
+		protected.DELETE("/emissor", emissorHandler.DeleteEmissor)
+		protected.POST("/emissor/documento", emissorHandler.GetEmissorByDocumento)
+
+		// Client
+		protected.POST("/client", clientHandler.CreateClient)
+		protected.GET("/client/id/:id", clientHandler.GetClientByID)
+		protected.GET("/client", clientHandler.GetAllClient)
+		protected.PUT("/client/id/:id", clientHandler.UpdateClient)
+		protected.DELETE("/client", clientHandler.DeleteClient)
+		protected.POST("/client/cpf", clientHandler.GetClientByCpf)
+
+		// Signature
+		protected.POST("/signature", signatureHandler.CreateSignature)
+		protected.GET("/signature/id/:id", signatureHandler.GetSignatureByID)
+		protected.GET("/signature", signatureHandler.GetAllSignature)
+		protected.PUT("/signature/id/:id", signatureHandler.UpdateSignature)
+		protected.DELETE("/signature", signatureHandler.DeleteSignature)
+		protected.POST("/signature/cliente", signatureHandler.GetSignatureByClienteID)
+
+		// Operacao
+		protected.POST("/operacao", operacaoHandler.CreateOperacao)
+		protected.GET("/operacao/id/:id", operacaoHandler.GetOperacaoByID)
+		protected.GET("/operacao", operacaoHandler.GetAllOperacao)
+		protected.PUT("/operacao/id/:id", operacaoHandler.UpdateOperacao)
+		protected.DELETE("/operacao", operacaoHandler.DeleteOperacao)
+
 	}
 
 	// Inicia servidor na porta 9090
