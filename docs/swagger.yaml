@@ -1,5 +1,137 @@
 basePath: /
 definitions:
+  model.Client:
+    properties:
+      celular:
+        type: string
+      clientID:
+        description: ver qual o motivo disso aqui, ta tentando simular o valor do
+          mongo?
+        type: string
+      cpf:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        description: ver qual o motivo disso aqui, ta tentando simular o valor do
+          mongo?
+        type: string
+      nome:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  model.ClientCpfRequest:
+    properties:
+      cpf:
+        type: string
+    required:
+    - cpf
+    type: object
+  model.ClientDeleteRequest:
+    properties:
+      id:
+        type: string
+    required:
+    - id
+    type: object
+  model.ClientReceive:
+    properties:
+      celular:
+        type: string
+      cpf:
+        type: string
+      email:
+        type: string
+      nome:
+        type: string
+    required:
+    - celular
+    - cpf
+    - email
+    - nome
+    type: object
+  model.Emissor:
+    properties:
+      created_at:
+        type: string
+      documento:
+        type: string
+      email:
+        type: string
+      emissor_id:
+        type: string
+      id:
+        type: string
+      nome:
+        type: string
+      senha:
+        type: string
+      token_confra_pix:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  model.EmissorDeleteRequest:
+    properties:
+      id:
+        type: string
+    required:
+    - id
+    type: object
+  model.EmissorDocumentoRequest:
+    properties:
+      documento:
+        type: string
+    required:
+    - documento
+    type: object
+  model.EmissorReceive:
+    properties:
+      documento:
+        type: string
+      email:
+        type: string
+      nome:
+        type: string
+      senha:
+        type: string
+      token_confra_pix:
+        type: string
+    required:
+    - documento
+    - email
+    - nome
+    - senha
+    - token_confra_pix
+    type: object
+  model.ExpenseCenter:
+    properties:
+      centroExpense_id:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      nome_centro:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  model.ExpenseCenterDeleteRequest:
+    properties:
+      id:
+        example: 647a8f9c0bde123456789abc
+        type: string
+    type: object
+  model.ExpenseCenterReceive:
+    properties:
+      nome_centro:
+        example: Administrativo
+        type: string
+    type: object
   model.Invoice:
     properties:
       amount:
@@ -63,13 +195,95 @@ definitions:
       uuid:
         type: string
     type: object
+  model.Operacao:
+    properties:
+      id:
+        type: string
+      nome:
+        type: string
+      operacao_id:
+        type: string
+    type: object
+  model.OperacaoDeleteRequest:
+    properties:
+      operacao_id:
+        type: string
+    required:
+    - operacao_id
+    type: object
+  model.OperacaoReceive:
+    properties:
+      nome:
+        type: string
+    required:
+    - nome
+    type: object
+  model.Signature:
+    properties:
+      centro_custo:
+        type: string
+      cliente_id:
+        type: string
+      created_at:
+        type: string
+      dia_lancamento:
+        type: integer
+      dia_vencimento:
+        type: integer
+      emitido_este_mes:
+        type: boolean
+      id:
+        type: string
+      qtd_parcelas:
+        type: integer
+      signature_id:
+        type: string
+      updated_at:
+        type: string
+      valor_operacao:
+        type: number
+      vencido_este_mes:
+        type: boolean
+    type: object
+  model.SignatureClienteRequest:
+    properties:
+      cliente_id:
+        type: string
+    required:
+    - cliente_id
+    type: object
+  model.SignatureDeleteRequest:
+    properties:
+      id:
+        type: string
+    required:
+    - id
+    type: object
+  model.SignatureReceive:
+    properties:
+      centro_custo:
+        type: string
+      cliente_id:
+        type: string
+      dia_lancamento:
+        type: integer
+      dia_vencimento:
+        type: integer
+      qtd_parcelas:
+        type: integer
+      valor_operacao:
+        type: number
+    required:
+    - centro_custo
+    - cliente_id
+    - dia_lancamento
+    - dia_vencimento
+    - qtd_parcelas
+    - valor_operacao
+    type: object
   model.User:
     properties:
       UpdatedAt:
-        type: string
-      acess_id:
-        type: string
-      client_id:
         type: string
       createdAt:
         type: string
@@ -83,12 +297,10 @@ definitions:
         type: string
       password:
         type: string
-      taxaFaltante:
-        type: string
-      taxaTotal:
-        type: string
       user_id:
         type: string
+      valid:
+        type: boolean
     type: object
   model.UserDeleteRequest:
     properties:
@@ -111,6 +323,66 @@ definitions:
         example: minhasenha123
         type: string
     type: object
+  model.Usuario:
+    properties:
+      celular:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      loja:
+        type: string
+      nivel:
+        type: integer
+      nome:
+        type: string
+      senha:
+        type: string
+      setor:
+        type: string
+      usuario_id:
+        type: string
+    type: object
+  model.UsuarioDeleteRequest:
+    properties:
+      usuario_id:
+        type: string
+    required:
+    - usuario_id
+    type: object
+  model.UsuarioEmailRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  model.UsuarioReceive:
+    properties:
+      celular:
+        type: string
+      email:
+        type: string
+      loja:
+        type: string
+      nivel:
+        type: integer
+      nome:
+        type: string
+      senha:
+        type: string
+      setor:
+        type: string
+    required:
+    - celular
+    - email
+    - loja
+    - nivel
+    - nome
+    - senha
+    - setor
+    type: object
 host: localhost:9090
 info:
   contact: {}
@@ -121,6 +393,498 @@ info:
   title: Pix Generation API
   version: "1.0"
 paths:
+  /client:
+    delete:
+      consumes:
+      - application/json
+      description: Deleta um cliente
+      parameters:
+      - description: ID do cliente
+        in: body
+        name: client
+        required: true
+        schema:
+          $ref: '#/definitions/model.ClientDeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Deleta cliente
+      tags:
+      - client
+    get:
+      consumes:
+      - application/json
+      description: Retorna todos os clientes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Client'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca todos os clientes
+      tags:
+      - client
+    post:
+      consumes:
+      - application/json
+      description: Cria um novo cliente
+      parameters:
+      - description: Dados do cliente
+        in: body
+        name: client
+        required: true
+        schema:
+          $ref: '#/definitions/model.ClientReceive'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Cria um novo cliente
+      tags:
+      - client
+  /client/cpf:
+    post:
+      consumes:
+      - application/json
+      description: Retorna um cliente pelo CPF
+      parameters:
+      - description: CPF do cliente
+        in: body
+        name: client
+        required: true
+        schema:
+          $ref: '#/definitions/model.ClientCpfRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Client'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca cliente por CPF
+      tags:
+      - client
+  /client/id/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retorna um cliente pelo ID
+      parameters:
+      - description: ID do cliente
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Client'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca cliente por ID
+      tags:
+      - client
+    put:
+      consumes:
+      - application/json
+      description: Atualiza um cliente
+      parameters:
+      - description: ID do cliente
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Dados do cliente
+        in: body
+        name: client
+        required: true
+        schema:
+          $ref: '#/definitions/model.ClientReceive'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Atualiza cliente
+      tags:
+      - client
+  /emissor:
+    delete:
+      consumes:
+      - application/json
+      description: Remove um emissor com base no EmissorID
+      parameters:
+      - description: EmissorID do emissor
+        in: body
+        name: emissor
+        required: true
+        schema:
+          $ref: '#/definitions/model.EmissorDeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Deleta emissor
+      tags:
+      - emissor
+    get:
+      consumes:
+      - application/json
+      description: Retorna todos os emissores cadastrados
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Emissor'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca todos os emissores
+      tags:
+      - emissor
+    post:
+      consumes:
+      - application/json
+      description: Cria um novo emissor com nome, email, senha, documento e tokenConfraPix
+      parameters:
+      - description: Dados do emissor
+        in: body
+        name: emissor
+        required: true
+        schema:
+          $ref: '#/definitions/model.EmissorReceive'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Cria um novo emissor
+      tags:
+      - emissor
+  /emissor/documento:
+    post:
+      consumes:
+      - application/json
+      description: Retorna um emissor com base no Documento (enviado via body)
+      parameters:
+      - description: Documento do emissor
+        in: body
+        name: documento
+        required: true
+        schema:
+          $ref: '#/definitions/model.EmissorDocumentoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Emissor'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca emissor por Documento
+      tags:
+      - emissor
+  /emissor/id/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retorna um emissor com base no EmissorID
+      parameters:
+      - description: EmissorID do emissor
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Emissor'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca emissor por ID
+      tags:
+      - emissor
+    put:
+      consumes:
+      - application/json
+      description: Atualiza dados de um emissor pelo EmissorID
+      parameters:
+      - description: EmissorID do emissor
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Novos dados do emissor
+        in: body
+        name: emissor
+        required: true
+        schema:
+          $ref: '#/definitions/model.EmissorReceive'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Atualiza emissor
+      tags:
+      - emissor
+  /expense-center:
+    delete:
+      consumes:
+      - application/json
+      description: Remove um centro de custo pelo ID
+      parameters:
+      - description: CentroExpenseID
+        in: body
+        name: expense_center
+        required: true
+        schema:
+          $ref: '#/definitions/model.ExpenseCenterDeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Deleta centro de custo
+      tags:
+      - expense_centers
+    post:
+      consumes:
+      - application/json
+      description: Cria um novo centro de custo
+      parameters:
+      - description: Dados do centro de custo
+        in: body
+        name: expense_center
+        required: true
+        schema:
+          $ref: '#/definitions/model.ExpenseCenterReceive'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Cria um centro de custo
+      tags:
+      - expense_centers
+  /expense-center/id/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retorna centro de custo por ID
+      parameters:
+      - description: CentroExpenseID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ExpenseCenter'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca centro de custo
+      tags:
+      - expense_centers
   /invoice:
     delete:
       consumes:
@@ -339,6 +1103,164 @@ paths:
       summary: Valida usuário
       tags:
       - users
+  /operacao:
+    delete:
+      consumes:
+      - application/json
+      description: Remove uma operação pelo OperacaoID
+      parameters:
+      - description: OperacaoID
+        in: body
+        name: operacao
+        required: true
+        schema:
+          $ref: '#/definitions/model.OperacaoDeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Deleta operação
+      tags:
+      - operations
+    get:
+      consumes:
+      - application/json
+      description: Retorna todas as operações registradas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Operacao'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Lista todas as operações
+      tags:
+      - operations
+    post:
+      consumes:
+      - application/json
+      description: Cadastra uma nova operação no sistema
+      parameters:
+      - description: Dados da operação
+        in: body
+        name: operacao
+        required: true
+        schema:
+          $ref: '#/definitions/model.OperacaoReceive'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Cria uma nova operação
+      tags:
+      - operations
+  /operacao/id/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retorna uma operação pelo OperacaoID
+      parameters:
+      - description: OperacaoID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Operacao'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca operação por ID
+      tags:
+      - operations
+    put:
+      consumes:
+      - application/json
+      description: Edita uma operação existente
+      parameters:
+      - description: OperacaoID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Dados atualizados
+        in: body
+        name: operacao
+        required: true
+        schema:
+          $ref: '#/definitions/model.OperacaoReceive'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Atualiza operação
+      tags:
+      - operations
   /register:
     post:
       consumes:
@@ -373,6 +1295,206 @@ paths:
       summary: Cria um novo usuário
       tags:
       - users
+  /signature:
+    delete:
+      consumes:
+      - application/json
+      description: Remove uma assinatura pelo SignatureID
+      parameters:
+      - description: SignatureID da assinatura
+        in: body
+        name: signature
+        required: true
+        schema:
+          $ref: '#/definitions/model.SignatureDeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Deleta assinatura
+      tags:
+      - signature
+    get:
+      consumes:
+      - application/json
+      description: Retorna todas as assinaturas cadastradas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Signature'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca todas as assinaturas
+      tags:
+      - signature
+    post:
+      consumes:
+      - application/json
+      description: Cria uma nova assinatura
+      parameters:
+      - description: Dados da assinatura
+        in: body
+        name: signature
+        required: true
+        schema:
+          $ref: '#/definitions/model.SignatureReceive'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Cria uma nova assinatura
+      tags:
+      - signature
+  /signature/cliente:
+    post:
+      consumes:
+      - application/json
+      description: Retorna assinaturas com base no ClienteID
+      parameters:
+      - description: ClienteID do cliente
+        in: body
+        name: cliente
+        required: true
+        schema:
+          $ref: '#/definitions/model.SignatureClienteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Signature'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca assinatura pelo ClienteID
+      tags:
+      - signature
+  /signature/id/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retorna uma assinatura pelo SignatureID
+      parameters:
+      - description: SignatureID da assinatura
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Signature'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca assinatura por ID
+      tags:
+      - signature
+    put:
+      consumes:
+      - application/json
+      description: Atualiza os dados de uma assinatura
+      parameters:
+      - description: SignatureID da assinatura
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Novos dados da assinatura
+        in: body
+        name: signature
+        required: true
+        schema:
+          $ref: '#/definitions/model.SignatureReceive'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Atualiza assinatura
+      tags:
+      - signature
   /user:
     delete:
       consumes:
@@ -498,4 +1620,202 @@ paths:
       summary: Lista todos os usuários
       tags:
       - users
+  /usuario:
+    delete:
+      consumes:
+      - application/json
+      description: Remove um usuário
+      parameters:
+      - description: UsuarioID do usuário
+        in: body
+        name: usuario
+        required: true
+        schema:
+          $ref: '#/definitions/model.UsuarioDeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Deleta usuário
+      tags:
+      - usuario
+    get:
+      consumes:
+      - application/json
+      description: Retorna todos os usuários cadastrados
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Usuario'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca todos os usuários
+      tags:
+      - usuario
+    post:
+      consumes:
+      - application/json
+      description: Cria um novo usuário
+      parameters:
+      - description: Dados do usuário
+        in: body
+        name: usuario
+        required: true
+        schema:
+          $ref: '#/definitions/model.UsuarioReceive'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Cria um novo usuário
+      tags:
+      - usuario
+  /usuario/email:
+    post:
+      consumes:
+      - application/json
+      description: Retorna um usuário pelo email
+      parameters:
+      - description: Email do usuário
+        in: body
+        name: email
+        required: true
+        schema:
+          $ref: '#/definitions/model.UsuarioEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Usuario'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca usuário por Email
+      tags:
+      - usuario
+  /usuario/id/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retorna um usuário pelo usuarioID
+      parameters:
+      - description: UsuarioID do usuário
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Usuario'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca usuário por ID
+      tags:
+      - usuario
+    put:
+      consumes:
+      - application/json
+      description: Atualiza dados de um usuário
+      parameters:
+      - description: UsuarioID do usuário
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Novos dados do usuário
+        in: body
+        name: usuario
+        required: true
+        schema:
+          $ref: '#/definitions/model.UsuarioReceive'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Atualiza usuário
+      tags:
+      - usuario
 swagger: "2.0"

@@ -19,6 +19,752 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/client": {
+            "get": {
+                "description": "Retorna todos os clientes",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "client"
+                ],
+                "summary": "Busca todos os clientes",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Client"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Cria um novo cliente",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "client"
+                ],
+                "summary": "Cria um novo cliente",
+                "parameters": [
+                    {
+                        "description": "Dados do cliente",
+                        "name": "client",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ClientReceive"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deleta um cliente",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "client"
+                ],
+                "summary": "Deleta cliente",
+                "parameters": [
+                    {
+                        "description": "ID do cliente",
+                        "name": "client",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ClientDeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/client/cpf": {
+            "post": {
+                "description": "Retorna um cliente pelo CPF",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "client"
+                ],
+                "summary": "Busca cliente por CPF",
+                "parameters": [
+                    {
+                        "description": "CPF do cliente",
+                        "name": "client",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ClientCpfRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Client"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/client/id/{id}": {
+            "get": {
+                "description": "Retorna um cliente pelo ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "client"
+                ],
+                "summary": "Busca cliente por ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do cliente",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Client"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Atualiza um cliente",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "client"
+                ],
+                "summary": "Atualiza cliente",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do cliente",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Dados do cliente",
+                        "name": "client",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ClientReceive"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/emissor": {
+            "get": {
+                "description": "Retorna todos os emissores cadastrados",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "emissor"
+                ],
+                "summary": "Busca todos os emissores",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Emissor"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Cria um novo emissor com nome, email, senha, documento e tokenConfraPix",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "emissor"
+                ],
+                "summary": "Cria um novo emissor",
+                "parameters": [
+                    {
+                        "description": "Dados do emissor",
+                        "name": "emissor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.EmissorReceive"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove um emissor com base no EmissorID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "emissor"
+                ],
+                "summary": "Deleta emissor",
+                "parameters": [
+                    {
+                        "description": "EmissorID do emissor",
+                        "name": "emissor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.EmissorDeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/emissor/documento": {
+            "post": {
+                "description": "Retorna um emissor com base no Documento (enviado via body)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "emissor"
+                ],
+                "summary": "Busca emissor por Documento",
+                "parameters": [
+                    {
+                        "description": "Documento do emissor",
+                        "name": "documento",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.EmissorDocumentoRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Emissor"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/emissor/id/{id}": {
+            "get": {
+                "description": "Retorna um emissor com base no EmissorID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "emissor"
+                ],
+                "summary": "Busca emissor por ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "EmissorID do emissor",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Emissor"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Atualiza dados de um emissor pelo EmissorID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "emissor"
+                ],
+                "summary": "Atualiza emissor",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "EmissorID do emissor",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Novos dados do emissor",
+                        "name": "emissor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.EmissorReceive"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/expense-center": {
+            "post": {
+                "description": "Cria um novo centro de custo",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "expense_centers"
+                ],
+                "summary": "Cria um centro de custo",
+                "parameters": [
+                    {
+                        "description": "Dados do centro de custo",
+                        "name": "expense_center",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ExpenseCenterReceive"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove um centro de custo pelo ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "expense_centers"
+                ],
+                "summary": "Deleta centro de custo",
+                "parameters": [
+                    {
+                        "description": "CentroExpenseID",
+                        "name": "expense_center",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ExpenseCenterDeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/expense-center/id/{id}": {
+            "get": {
+                "description": "Retorna centro de custo por ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "expense_centers"
+                ],
+                "summary": "Busca centro de custo",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "CentroExpenseID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.ExpenseCenter"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/invoice": {
             "post": {
                 "description": "Cria uma nova fatura a partir dos dados fornecidos",
@@ -350,6 +1096,245 @@ const docTemplate = `{
                 }
             }
         },
+        "/operacao": {
+            "get": {
+                "description": "Retorna todas as operações registradas",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "operations"
+                ],
+                "summary": "Lista todas as operações",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Operacao"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Cadastra uma nova operação no sistema",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "operations"
+                ],
+                "summary": "Cria uma nova operação",
+                "parameters": [
+                    {
+                        "description": "Dados da operação",
+                        "name": "operacao",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.OperacaoReceive"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove uma operação pelo OperacaoID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "operations"
+                ],
+                "summary": "Deleta operação",
+                "parameters": [
+                    {
+                        "description": "OperacaoID",
+                        "name": "operacao",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.OperacaoDeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/operacao/id/{id}": {
+            "get": {
+                "description": "Retorna uma operação pelo OperacaoID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "operations"
+                ],
+                "summary": "Busca operação por ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "OperacaoID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Operacao"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Edita uma operação existente",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "operations"
+                ],
+                "summary": "Atualiza operação",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "OperacaoID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Dados atualizados",
+                        "name": "operacao",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.OperacaoReceive"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/register": {
             "post": {
                 "description": "Cadastra um novo usuário",
@@ -379,6 +1364,309 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/model.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/signature": {
+            "get": {
+                "description": "Retorna todas as assinaturas cadastradas",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "signature"
+                ],
+                "summary": "Busca todas as assinaturas",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Signature"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Cria uma nova assinatura",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "signature"
+                ],
+                "summary": "Cria uma nova assinatura",
+                "parameters": [
+                    {
+                        "description": "Dados da assinatura",
+                        "name": "signature",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SignatureReceive"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove uma assinatura pelo SignatureID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "signature"
+                ],
+                "summary": "Deleta assinatura",
+                "parameters": [
+                    {
+                        "description": "SignatureID da assinatura",
+                        "name": "signature",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SignatureDeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/signature/cliente": {
+            "post": {
+                "description": "Retorna assinaturas com base no ClienteID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "signature"
+                ],
+                "summary": "Busca assinatura pelo ClienteID",
+                "parameters": [
+                    {
+                        "description": "ClienteID do cliente",
+                        "name": "cliente",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SignatureClienteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Signature"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/signature/id/{id}": {
+            "get": {
+                "description": "Retorna uma assinatura pelo SignatureID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "signature"
+                ],
+                "summary": "Busca assinatura por ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "SignatureID da assinatura",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Signature"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Atualiza os dados de uma assinatura",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "signature"
+                ],
+                "summary": "Atualiza assinatura",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "SignatureID da assinatura",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Novos dados da assinatura",
+                        "name": "signature",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SignatureReceive"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     },
                     "400": {
@@ -591,9 +1879,504 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/usuario": {
+            "get": {
+                "description": "Retorna todos os usuários cadastrados",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "usuario"
+                ],
+                "summary": "Busca todos os usuários",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Usuario"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Cria um novo usuário",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "usuario"
+                ],
+                "summary": "Cria um novo usuário",
+                "parameters": [
+                    {
+                        "description": "Dados do usuário",
+                        "name": "usuario",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UsuarioReceive"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove um usuário",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "usuario"
+                ],
+                "summary": "Deleta usuário",
+                "parameters": [
+                    {
+                        "description": "UsuarioID do usuário",
+                        "name": "usuario",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UsuarioDeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/usuario/email": {
+            "post": {
+                "description": "Retorna um usuário pelo email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "usuario"
+                ],
+                "summary": "Busca usuário por Email",
+                "parameters": [
+                    {
+                        "description": "Email do usuário",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UsuarioEmailRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Usuario"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/usuario/id/{id}": {
+            "get": {
+                "description": "Retorna um usuário pelo usuarioID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "usuario"
+                ],
+                "summary": "Busca usuário por ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "UsuarioID do usuário",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Usuario"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Atualiza dados de um usuário",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "usuario"
+                ],
+                "summary": "Atualiza usuário",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "UsuarioID do usuário",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Novos dados do usuário",
+                        "name": "usuario",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UsuarioReceive"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "model.Client": {
+            "type": "object",
+            "properties": {
+                "celular": {
+                    "type": "string"
+                },
+                "clientID": {
+                    "description": "ver qual o motivo disso aqui, ta tentando simular o valor do mongo?",
+                    "type": "string"
+                },
+                "cpf": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "ver qual o motivo disso aqui, ta tentando simular o valor do mongo?",
+                    "type": "string"
+                },
+                "nome": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ClientCpfRequest": {
+            "type": "object",
+            "required": [
+                "cpf"
+            ],
+            "properties": {
+                "cpf": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ClientDeleteRequest": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ClientReceive": {
+            "type": "object",
+            "required": [
+                "celular",
+                "cpf",
+                "email",
+                "nome"
+            ],
+            "properties": {
+                "celular": {
+                    "type": "string"
+                },
+                "cpf": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "nome": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Emissor": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "documento": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "emissor_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "nome": {
+                    "type": "string"
+                },
+                "senha": {
+                    "type": "string"
+                },
+                "token_confra_pix": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.EmissorDeleteRequest": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.EmissorDocumentoRequest": {
+            "type": "object",
+            "required": [
+                "documento"
+            ],
+            "properties": {
+                "documento": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.EmissorReceive": {
+            "type": "object",
+            "required": [
+                "documento",
+                "email",
+                "nome",
+                "senha",
+                "token_confra_pix"
+            ],
+            "properties": {
+                "documento": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "nome": {
+                    "type": "string"
+                },
+                "senha": {
+                    "type": "string"
+                },
+                "token_confra_pix": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ExpenseCenter": {
+            "type": "object",
+            "properties": {
+                "centroExpense_id": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "nome_centro": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ExpenseCenterDeleteRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "647a8f9c0bde123456789abc"
+                }
+            }
+        },
+        "model.ExpenseCenterReceive": {
+            "type": "object",
+            "properties": {
+                "nome_centro": {
+                    "type": "string",
+                    "example": "Administrativo"
+                }
+            }
+        },
         "model.Invoice": {
             "type": "object",
             "properties": {
@@ -690,16 +2473,140 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Operacao": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "nome": {
+                    "type": "string"
+                },
+                "operacao_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.OperacaoDeleteRequest": {
+            "type": "object",
+            "required": [
+                "operacao_id"
+            ],
+            "properties": {
+                "operacao_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.OperacaoReceive": {
+            "type": "object",
+            "required": [
+                "nome"
+            ],
+            "properties": {
+                "nome": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Signature": {
+            "type": "object",
+            "properties": {
+                "centro_custo": {
+                    "type": "string"
+                },
+                "cliente_id": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "dia_lancamento": {
+                    "type": "integer"
+                },
+                "dia_vencimento": {
+                    "type": "integer"
+                },
+                "emitido_este_mes": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "qtd_parcelas": {
+                    "type": "integer"
+                },
+                "signature_id": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "valor_operacao": {
+                    "type": "number"
+                },
+                "vencido_este_mes": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.SignatureClienteRequest": {
+            "type": "object",
+            "required": [
+                "cliente_id"
+            ],
+            "properties": {
+                "cliente_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SignatureDeleteRequest": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SignatureReceive": {
+            "type": "object",
+            "required": [
+                "centro_custo",
+                "cliente_id",
+                "dia_lancamento",
+                "dia_vencimento",
+                "qtd_parcelas",
+                "valor_operacao"
+            ],
+            "properties": {
+                "centro_custo": {
+                    "type": "string"
+                },
+                "cliente_id": {
+                    "type": "string"
+                },
+                "dia_lancamento": {
+                    "type": "integer"
+                },
+                "dia_vencimento": {
+                    "type": "integer"
+                },
+                "qtd_parcelas": {
+                    "type": "integer"
+                },
+                "valor_operacao": {
+                    "type": "number"
+                }
+            }
+        },
         "model.User": {
             "type": "object",
             "properties": {
                 "UpdatedAt": {
-                    "type": "string"
-                },
-                "acess_id": {
-                    "type": "string"
-                },
-                "client_id": {
                     "type": "string"
                 },
                 "createdAt": {
@@ -720,14 +2627,11 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "taxaFaltante": {
-                    "type": "string"
-                },
-                "taxaTotal": {
-                    "type": "string"
-                },
                 "user_id": {
                     "type": "string"
+                },
+                "valid": {
+                    "type": "boolean"
                 }
             }
         },
@@ -759,6 +2663,95 @@ const docTemplate = `{
                 "password": {
                     "type": "string",
                     "example": "minhasenha123"
+                }
+            }
+        },
+        "model.Usuario": {
+            "type": "object",
+            "properties": {
+                "celular": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "loja": {
+                    "type": "string"
+                },
+                "nivel": {
+                    "type": "integer"
+                },
+                "nome": {
+                    "type": "string"
+                },
+                "senha": {
+                    "type": "string"
+                },
+                "setor": {
+                    "type": "string"
+                },
+                "usuario_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UsuarioDeleteRequest": {
+            "type": "object",
+            "required": [
+                "usuario_id"
+            ],
+            "properties": {
+                "usuario_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UsuarioEmailRequest": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UsuarioReceive": {
+            "type": "object",
+            "required": [
+                "celular",
+                "email",
+                "loja",
+                "nivel",
+                "nome",
+                "senha",
+                "setor"
+            ],
+            "properties": {
+                "celular": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "loja": {
+                    "type": "string"
+                },
+                "nivel": {
+                    "type": "integer"
+                },
+                "nome": {
+                    "type": "string"
+                },
+                "senha": {
+                    "type": "string"
+                },
+                "setor": {
+                    "type": "string"
                 }
             }
         }

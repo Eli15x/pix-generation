@@ -10,26 +10,26 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ExpenseCenterHandler define o handler com injeção de dependência do service
+// ExpenseCenterHandler trata rotas de centro de custo
 type ExpenseCenterHandler struct {
 	service service.ServiceExpenseCenter
 }
 
-// NewExpenseCenterHandler retorna um handler com o service injetado
+// NewExpenseCenterHandler injeta a dependência do service
 func NewExpenseCenterHandler(s service.ServiceExpenseCenter) *ExpenseCenterHandler {
 	return &ExpenseCenterHandler{service: s}
 }
 
 // CreateExpenseCenter godoc
-// @Summary      Cria um novo centro de custo
-// @Description  Cria um novo centro de custo com nome
-// @Tags         expense_center
+// @Summary      Cria um centro de custo
+// @Description  Cria um novo centro de custo
+// @Tags         expense_centers
 // @Accept       json
 // @Produce      json
-// @Param        expense_center  body      model.ExpenseCenterReceive  true  "Dados do centro de custo"
-// @Success      200             {string}  string "ok"
-// @Failure      400             {object}  map[string]string
-// @Failure      500             {object}  map[string]string
+// @Param        expense_center  body  model.ExpenseCenterReceive  true  "Dados do centro de custo"
+// @Success      200  {string}  string "ok"
+// @Failure      400  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
 // @Router       /expense-center [post]
 func (h *ExpenseCenterHandler) CreateExpenseCenter(c *gin.Context) {
 	var ec model.ExpenseCenterReceive
@@ -46,14 +46,13 @@ func (h *ExpenseCenterHandler) CreateExpenseCenter(c *gin.Context) {
 }
 
 // GetExpenseCenterByID godoc
-// @Summary      Busca centro de custo por ID
-// @Description  Retorna um centro de custo com base no ID
-// @Tags         expense_center
+// @Summary      Busca centro de custo
+// @Description  Retorna centro de custo por ID
+// @Tags         expense_centers
 // @Accept       json
 // @Produce      json
-// @Param        id  path      string  true  "ID do centro de custo"
+// @Param        id  path      string  true  "CentroExpenseID"
 // @Success      200 {object}  model.ExpenseCenter
-// @Failure      400 {object}  map[string]string
 // @Failure      404 {object}  map[string]string
 // @Router       /expense-center/id/{id} [get]
 func (h *ExpenseCenterHandler) GetExpenseCenterByID(c *gin.Context) {
@@ -68,11 +67,11 @@ func (h *ExpenseCenterHandler) GetExpenseCenterByID(c *gin.Context) {
 
 // DeleteExpenseCenter godoc
 // @Summary      Deleta centro de custo
-// @Description  Remove um centro de custo com base no ID
-// @Tags         expense_center
+// @Description  Remove um centro de custo pelo ID
+// @Tags         expense_centers
 // @Accept       json
 // @Produce      json
-// @Param        expense_center  body      model.ExpenseCenterDeleteRequest  true  "ID do centro de custo"
+// @Param        expense_center  body  model.ExpenseCenterDeleteRequest  true  "CentroExpenseID"
 // @Success      200 {object}  map[string]string
 // @Failure      400 {object}  map[string]string
 // @Failure      500 {object}  map[string]string

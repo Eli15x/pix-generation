@@ -10,26 +10,26 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// OperacaoHandler define o handler
+// OperacaoHandler trata rotas relacionadas a operações
 type OperacaoHandler struct {
 	service service.ServiceOperacao
 }
 
-// NewOperacaoHandler cria um novo handler
+// NewOperacaoHandler injeta a dependência do ServiceOperacao
 func NewOperacaoHandler(s service.ServiceOperacao) *OperacaoHandler {
 	return &OperacaoHandler{service: s}
 }
 
 // CreateOperacao godoc
 // @Summary      Cria uma nova operação
-// @Description  Cria uma nova operação
-// @Tags         operacao
+// @Description  Cadastra uma nova operação no sistema
+// @Tags         operations
 // @Accept       json
 // @Produce      json
 // @Param        operacao  body      model.OperacaoReceive  true  "Dados da operação"
-// @Success      200        {string}  string "ok"
-// @Failure      400        {object}  map[string]string
-// @Failure      500        {object}  map[string]string
+// @Success      200       {string}  string "ok"
+// @Failure      400       {object}  map[string]string
+// @Failure      500       {object}  map[string]string
 // @Router       /operacao [post]
 func (h *OperacaoHandler) CreateOperacao(c *gin.Context) {
 	var req model.OperacaoReceive
@@ -46,19 +46,17 @@ func (h *OperacaoHandler) CreateOperacao(c *gin.Context) {
 }
 
 // GetOperacaoByID godoc
-// @Summary      Busca operação por OperacaoID
+// @Summary      Busca operação por ID
 // @Description  Retorna uma operação pelo OperacaoID
-// @Tags         operacao
+// @Tags         operations
 // @Accept       json
 // @Produce      json
-// @Param        id  path      string  true  "OperacaoID da operação"
+// @Param        id  path      string  true  "OperacaoID"
 // @Success      200 {object}  model.Operacao
-// @Failure      400 {object}  map[string]string
 // @Failure      404 {object}  map[string]string
 // @Router       /operacao/id/{id} [get]
 func (h *OperacaoHandler) GetOperacaoByID(c *gin.Context) {
 	id := c.Param("id")
-
 	operacao, err := h.service.GetOperacaoByID(context.Background(), id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
@@ -68,9 +66,9 @@ func (h *OperacaoHandler) GetOperacaoByID(c *gin.Context) {
 }
 
 // GetAllOperacao godoc
-// @Summary      Busca todas as operações
-// @Description  Retorna todas as operações cadastradas
-// @Tags         operacao
+// @Summary      Lista todas as operações
+// @Description  Retorna todas as operações registradas
+// @Tags         operations
 // @Accept       json
 // @Produce      json
 // @Success      200 {array}  model.Operacao
@@ -87,19 +85,18 @@ func (h *OperacaoHandler) GetAllOperacao(c *gin.Context) {
 
 // UpdateOperacao godoc
 // @Summary      Atualiza operação
-// @Description  Atualiza dados de uma operação
-// @Tags         operacao
+// @Description  Edita uma operação existente
+// @Tags         operations
 // @Accept       json
 // @Produce      json
-// @Param        id         path      string                 true  "OperacaoID da operação"
-// @Param        operacao   body      model.OperacaoReceive  true  "Novos dados da operação"
+// @Param        id         path      string                 true  "OperacaoID"
+// @Param        operacao   body      model.OperacaoReceive  true  "Dados atualizados"
 // @Success      200 {object}  map[string]string
 // @Failure      400 {object}  map[string]string
 // @Failure      500 {object}  map[string]string
 // @Router       /operacao/id/{id} [put]
 func (h *OperacaoHandler) UpdateOperacao(c *gin.Context) {
 	id := c.Param("id")
-
 	var req model.OperacaoReceive
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -115,11 +112,11 @@ func (h *OperacaoHandler) UpdateOperacao(c *gin.Context) {
 
 // DeleteOperacao godoc
 // @Summary      Deleta operação
-// @Description  Remove uma operação
-// @Tags         operacao
+// @Description  Remove uma operação pelo OperacaoID
+// @Tags         operations
 // @Accept       json
 // @Produce      json
-// @Param        operacao  body      model.OperacaoDeleteRequest  true  "OperacaoID da operação"
+// @Param        operacao  body      model.OperacaoDeleteRequest  true  "OperacaoID"
 // @Success      200 {object}  map[string]string
 // @Failure      400 {object}  map[string]string
 // @Failure      500 {object}  map[string]string
