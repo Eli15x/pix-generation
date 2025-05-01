@@ -59,6 +59,7 @@ func main() {
 	clientService := service.GetInstanceClient()
 	signatureService := service.GetInstanceSignature()
 	operacaoService := service.GetInstanceOperacao()
+	usuarioService := service.GetInstanceUsuario()
 
 	// Injeção dos handlers
 	userHandler := handler.NewUserHandler(userService)
@@ -67,6 +68,7 @@ func main() {
 	clientHandler := handler.NewClientHandler(clientService)
 	signatureHandler := handler.NewSignatureHandler(signatureService)
 	operacaoHandler := handler.NewOperacaoHandler(operacaoService)
+	usuarioHandler := handler.NewUsuarioHandler(usuarioService)
 
 	// Rotas públicas
 	r.POST("/login", userHandler.ValidateUser)
@@ -116,6 +118,14 @@ func main() {
 		protected.GET("/operacao", operacaoHandler.GetAllOperacao)
 		protected.PUT("/operacao/id/:id", operacaoHandler.UpdateOperacao)
 		protected.DELETE("/operacao", operacaoHandler.DeleteOperacao)
+
+		// Usuario
+		protected.POST("/usuario", usuarioHandler.CreateUsuario)
+		protected.GET("/usuario/id/:id", usuarioHandler.GetUsuarioByID)
+		protected.GET("/usuario", usuarioHandler.GetAllUsuario)
+		protected.PUT("/usuario/id/:id", usuarioHandler.UpdateUsuario)
+		protected.DELETE("/usuario", usuarioHandler.DeleteUsuario)
+		protected.POST("/usuario/email", usuarioHandler.GetUsuarioByEmail)
 
 	}
 
