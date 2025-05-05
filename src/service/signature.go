@@ -69,7 +69,7 @@ func (s *Signature) CreateSignature(ctx context.Context, signatureReceive model.
 
 func (s *Signature) GetSignatureByID(ctx context.Context, id string) (model.Signature, error) {
 	var signature model.Signature
-	filter := map[string]interface{}{"signatureID": id}
+	filter := map[string]interface{}{"SignatureID": id}
 
 	signature, err := repository.GetInstanceSignature().FindOne(ctx, "Signature", filter)
 	if err != nil {
@@ -116,7 +116,7 @@ func (s *Signature) UpdateSignature(ctx context.Context, id string, update model
 }
 
 func (s *Signature) DeleteSignature(ctx context.Context, id string) error {
-	filter := map[string]interface{}{"signatureID": id}
+	filter := map[string]interface{}{"SignatureID": id}
 
 	err := client.GetInstance().Remove(ctx, "Signature", filter)
 	if err != nil {
@@ -127,7 +127,7 @@ func (s *Signature) DeleteSignature(ctx context.Context, id string) error {
 }
 
 func (s *Signature) GetSignatureByClienteID(ctx context.Context, clienteID string) ([]model.Signature, error) {
-	filter := map[string]interface{}{"clienteID": clienteID}
+	filter := map[string]interface{}{"ClienteID": clienteID}
 
 	signatures, err := repository.GetInstanceSignature().Find(ctx, "Signature", filter)
 	if err != nil {

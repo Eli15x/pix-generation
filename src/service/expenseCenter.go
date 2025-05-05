@@ -63,7 +63,7 @@ func (e *ExpenseCenter) GetExpenseCenterByID(ctx context.Context, id string) (mo
 }
 
 func (e *ExpenseCenter) UpdateExpenseCenter(ctx context.Context, id string, update model.ExpenseCenterReceive) error {
-	filter := bson.M{"centroExpenseID": id}
+	filter := bson.M{"CentroExpenseID": id}
 	updateData := bson.M{
 		"$set": bson.M{
 			"nomeCentro": update.NomeCentro,
@@ -79,7 +79,7 @@ func (e *ExpenseCenter) UpdateExpenseCenter(ctx context.Context, id string, upda
 }
 
 func (e *ExpenseCenter) DeleteExpenseCenter(ctx context.Context, id string) error {
-	filter := map[string]interface{}{"centroExpenseID": id}
+	filter := map[string]interface{}{"CentroExpenseID": id}
 	err := client.GetInstance().Remove(ctx, "ExpenseCenter", filter)
 	if err != nil {
 		return errors.New("Delete ExpenseCenter: problem to delete from MongoDB")

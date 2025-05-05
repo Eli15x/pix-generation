@@ -8,14 +8,14 @@ import (
 
 type Emissor struct {
 	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	EmissorID      string             `bson:"emissorID,omitempty" json:"emissor_id,omitempty"`
-	Nome           string             `bson:"nome" json:"nome"`
-	Email          string             `bson:"email" json:"email"`
-	Senha          string             `bson:"senha" json:"senha"`
-	Documento      string             `bson:"documento" json:"documento"`
-	TokenConfraPix string             `bson:"tokenConfraPix" json:"token_confra_pix"`
-	CreatedAt      time.Time          `bson:"createdAt" json:"created_at"`
-	UpdatedAt      time.Time          `bson:"updatedAt" json:"updated_at"`
+	EmissorID      string             `bson:"EmissorID,omitempty" json:"emissor_id,omitempty"`
+	Nome           string             `bson:"Nome" json:"nome"`
+	Email          string             `bson:"Email" json:"email"`
+	Senha          string             `bson:"Senha" json:"senha"`
+	Documento      string             `bson:"Documento" json:"documento"`
+	TokenConfraPix string             `bson:"TokenConfraPix,omitempty" json:"token_confra_pix,omitempty"`
+	CreatedAt      time.Time          `bson:"CreatedAt" json:"created_at"`
+	UpdatedAt      time.Time          `bson:"UpdatedAt" json:"updated_at"`
 }
 
 type EmissorReceive struct {

@@ -60,7 +60,7 @@ func (o *Operacao) GetAllOperacao(ctx context.Context) ([]model.Operacao, error)
 }
 
 func (o *Operacao) UpdateOperacao(ctx context.Context, id string, operacao model.OperacaoReceive) error {
-	filter := bson.M{"operacaoID": id}
+	filter := bson.M{"OperacaoID": id}
 	updateData := bson.M{
 		"$set": bson.M{
 			"nome": operacao.Nome,
@@ -75,7 +75,7 @@ func (o *Operacao) UpdateOperacao(ctx context.Context, id string, operacao model
 }
 
 func (o *Operacao) DeleteOperacao(ctx context.Context, id string) error {
-	filter := map[string]interface{}{"operacaoID": id}
+	filter := map[string]interface{}{"OperacaoID": id}
 
 	err := client.GetInstance().Remove(ctx, "Operacao", filter)
 	if err != nil {

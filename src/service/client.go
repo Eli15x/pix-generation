@@ -59,7 +59,7 @@ func (c *Client) CreateClient(ctx context.Context, clientReceive model.ClientRec
 
 func (c *Client) GetClientByID(ctx context.Context, id string) (model.Client, error) {
 	var client model.Client
-	filter := map[string]interface{}{"clientID": id}
+	filter := map[string]interface{}{"ClientID": id}
 
 	client, err := repository.GetInstanceClient().FindOne(ctx, "Client", filter)
 	if err != nil {
@@ -99,7 +99,7 @@ func (c *Client) UpdateClient(ctx context.Context, id string, update model.Clien
 }
 
 func (c *Client) DeleteClient(ctx context.Context, id string) error {
-	filter := map[string]interface{}{"clientID": id}
+	filter := map[string]interface{}{"ClientID": id}
 
 	err := client.GetInstance().Remove(ctx, "Client", filter)
 	if err != nil {
@@ -111,7 +111,7 @@ func (c *Client) DeleteClient(ctx context.Context, id string) error {
 
 func (c *Client) GetClientByCpf(ctx context.Context, cpf string) (model.Client, error) {
 	var client model.Client
-	filter := map[string]interface{}{"cpf": cpf}
+	filter := map[string]interface{}{"Cpf": cpf}
 
 	client, err := repository.GetInstanceClient().FindOne(ctx, "Client", filter)
 	if err != nil {
