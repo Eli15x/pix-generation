@@ -7,6 +7,7 @@ import (
 type Usuario struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
 	UsuarioID string             `bson:"usuarioID" json:"usuario_id"`
+	UserID    string             `bson:"userID" json:"user_id"`
 	Nome      string             `bson:"nome" json:"nome"`
 	Email     string             `bson:"email" json:"email"`
 	Senha     string             `bson:"senha" json:"senha"`
@@ -18,6 +19,7 @@ type Usuario struct {
 
 type UsuarioReceive struct {
 	Nome    string `json:"nome" binding:"required"`
+	UserID  string `json:"user_id" binding:"required"`
 	Email   string `json:"email" binding:"required"`
 	Senha   string `json:"senha" binding:"required"`
 	Nivel   int    `json:"nivel" binding:"required"`

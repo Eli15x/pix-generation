@@ -57,7 +57,7 @@ func (u *Usuario) CreateUsuario(ctx context.Context, usuarioReceive model.Usuari
 }
 
 func (u *Usuario) GetUsuarioByID(ctx context.Context, id string) (model.Usuario, error) {
-	filter := map[string]interface{}{"usuarioID": id}
+	filter := map[string]interface{}{"UsuarioID": id}
 	return repository.GetInstanceUsuario().FindOne(ctx, "Usuario", filter)
 }
 
@@ -88,7 +88,7 @@ func (u *Usuario) UpdateUsuario(ctx context.Context, id string, usuario model.Us
 }
 
 func (u *Usuario) DeleteUsuario(ctx context.Context, id string) error {
-	filter := map[string]interface{}{"usuarioID": id}
+	filter := map[string]interface{}{"UsuarioID": id}
 
 	err := client.GetInstance().Remove(ctx, "Usuario", filter)
 	if err != nil {
@@ -98,6 +98,6 @@ func (u *Usuario) DeleteUsuario(ctx context.Context, id string) error {
 }
 
 func (u *Usuario) GetUsuarioByEmail(ctx context.Context, email string) (model.Usuario, error) {
-	filter := map[string]interface{}{"email": email}
+	filter := map[string]interface{}{"Email": email}
 	return repository.GetInstanceUsuario().FindOne(ctx, "Usuario", filter)
 }
