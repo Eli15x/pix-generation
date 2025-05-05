@@ -2687,6 +2687,9 @@
                 "setor": {
                     "type": "string"
                 },
+                "user_id": {
+                    "type": "string"
+                },
                 "usuario_id": {
                     "type": "string"
                 }
@@ -2723,7 +2726,8 @@
                 "nivel",
                 "nome",
                 "senha",
-                "setor"
+                "setor",
+                "user_id"
             ],
             "properties": {
                 "celular": {
@@ -2745,6 +2749,9 @@
                     "type": "string"
                 },
                 "setor": {
+                    "type": "string"
+                },
+                "user_id": {
                     "type": "string"
                 }
             }

@@ -2693,6 +2693,9 @@ const docTemplate = `{
                 "setor": {
                     "type": "string"
                 },
+                "user_id": {
+                    "type": "string"
+                },
                 "usuario_id": {
                     "type": "string"
                 }
@@ -2729,7 +2732,8 @@ const docTemplate = `{
                 "nivel",
                 "nome",
                 "senha",
-                "setor"
+                "setor",
+                "user_id"
             ],
             "properties": {
                 "celular": {
@@ -2751,6 +2755,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "setor": {
+                    "type": "string"
+                },
+                "user_id": {
                     "type": "string"
                 }
             }
