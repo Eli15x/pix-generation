@@ -6,7 +6,7 @@ import (
 
 type Operacao struct {
 	ID         primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	OperacaoID string             `bson:"operacaoID" json:"operacao_id"`
+	OperacaoID string             `bson:"OperacaoID" json:"operacao_id"`
 	Nome       string             `bson:"nome" json:"nome"`
 }
 

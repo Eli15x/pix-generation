@@ -7,18 +7,17 @@ import (
 )
 
 type Signature struct {
-	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
 	SignatureID    string             `bson:"signatureID" json:"signature_id"`
-	ClienteID      string             `bson:"clienteID" json:"cliente_id"`
-	DiaLancamento  int                `bson:"dia_lancamento" json:"dia_lancamento"`
-	DiaVencimento  int                `bson:"dia_vencimento" json:"dia_vencimento"`
-	QtdParcelas    int                `bson:"qdta_parcelas" json:"qtd_parcelas"`
-	CentroCustoID  primitive.ObjectID `bson:"centroCusto" json:"centro_custo"`
-	ValorOperacao  float64            `bson:"valorOperacao" json:"valor_operacao"`
-	EmitidoEsteMes bool               `bson:"emitidoEsteMes" json:"emitido_este_mes"`
-	VencidoEsteMes bool               `bson:"vencidoEsteMes" json:"vencido_este_mes"`
-	CreatedAt      time.Time          `bson:"createdAt" json:"created_at"`
-	UpdatedAt      time.Time          `bson:"updatedAt" json:"updated_at"`
+	ClienteID      string             `bson:"ClienteID" json:"cliente_id"`
+	DiaLancamento  int                `bson:"Dia_lancamento" json:"dia_lancamento"`
+	DiaVencimento  int                `bson:"Dia_vencimento" json:"dia_vencimento"`
+	QtdParcelas    int                `bson:"Qdta_parcelas" json:"qtd_parcelas"`
+	CentroCustoID  primitive.ObjectID `bson:"CentroCusto" json:"centro_custo"`
+	ValorOperacao  float64            `bson:"ValorOperacao" json:"valor_operacao"`
+	EmitidoEsteMes bool               `bson:"EmitidoEsteMes" json:"emitido_este_mes"`
+	VencidoEsteMes bool               `bson:"VencidoEsteMes" json:"vencido_este_mes"`
+	CreatedAt      time.Time          `bson:"CreatedAt" json:"created_at"`
+	UpdatedAt      time.Time          `bson:"UpdatedAt" json:"updated_at"`
 }
 
 type SignatureReceive struct {
@@ -31,7 +30,7 @@ type SignatureReceive struct {
 }
 
 type SignatureDeleteRequest struct {
-	ID string `json:"id" binding:"required"`
+	SignatureID string `json:"id" binding:"required"`
 }
 
 type SignatureClienteRequest struct {

@@ -50,7 +50,7 @@ func (o *Operacao) CreateOperacao(ctx context.Context, operacaoReceive model.Ope
 }
 
 func (o *Operacao) GetOperacaoByID(ctx context.Context, id string) (model.Operacao, error) {
-	filter := map[string]interface{}{"operacaoID": id}
+	filter := map[string]interface{}{"OperacaoID": id}
 	return repository.GetInstanceOperacao().FindOne(ctx, "Operacao", filter)
 }
 
