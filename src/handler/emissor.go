@@ -128,7 +128,7 @@ func (h *EmissorHandler) DeleteEmissor(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.DeleteEmissor(context.Background(), req.ID)
+	err := h.service.DeleteEmissor(context.Background(), req.EmissorID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
