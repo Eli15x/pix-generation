@@ -128,7 +128,7 @@ func (h *SignatureHandler) DeleteSignature(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.DeleteSignature(context.Background(), req.ID)
+	err := h.service.DeleteSignature(context.Background(), req.SignatureID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

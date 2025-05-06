@@ -82,7 +82,7 @@ func (h *ExpenseCenterHandler) DeleteExpenseCenter(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.DeleteExpenseCenter(context.Background(), req.ID)
+	err := h.service.DeleteExpenseCenter(context.Background(), req.CentroExpenseID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

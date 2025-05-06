@@ -111,8 +111,6 @@ definitions:
         type: string
       created_at:
         type: string
-      id:
-        type: string
       nome_centro:
         type: string
       updated_at:
@@ -139,8 +137,6 @@ definitions:
       emitido:
         type: string
       expira:
-        type: string
-      id:
         type: string
       idTransacao:
         type: integer
@@ -230,8 +226,6 @@ definitions:
         type: integer
       emitido_este_mes:
         type: boolean
-      id:
-        type: string
       qtd_parcelas:
         type: integer
       signature_id:
@@ -326,8 +320,6 @@ definitions:
       celular:
         type: string
       email:
-        type: string
-      id:
         type: string
       loja:
         type: string

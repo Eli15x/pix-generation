@@ -2339,9 +2339,6 @@
                 "created_at": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "string"
-                },
                 "nome_centro": {
                     "type": "string"
                 },
@@ -2381,9 +2378,6 @@
                     "type": "string"
                 },
                 "expira": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "idTransacao": {
@@ -2520,9 +2514,6 @@
                 },
                 "emitido_este_mes": {
                     "type": "boolean"
-                },
-                "id": {
-                    "type": "string"
                 },
                 "qtd_parcelas": {
                     "type": "integer"
@@ -2664,9 +2655,6 @@
                     "type": "string"
                 },
                 "email": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "loja": {

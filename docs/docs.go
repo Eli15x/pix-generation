@@ -2345,9 +2345,6 @@ const docTemplate = `{
                 "created_at": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "string"
-                },
                 "nome_centro": {
                     "type": "string"
                 },
@@ -2387,9 +2384,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "expira": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "idTransacao": {
@@ -2526,9 +2520,6 @@ const docTemplate = `{
                 },
                 "emitido_este_mes": {
                     "type": "boolean"
-                },
-                "id": {
-                    "type": "string"
                 },
                 "qtd_parcelas": {
                     "type": "integer"
@@ -2670,9 +2661,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "email": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "loja": {
