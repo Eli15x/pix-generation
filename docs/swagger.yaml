@@ -63,8 +63,6 @@ definitions:
         type: string
       emissor_id:
         type: string
-      id:
-        type: string
       nome:
         type: string
       senha:
@@ -76,10 +74,10 @@ definitions:
     type: object
   model.EmissorDeleteRequest:
     properties:
-      id:
+      emissor_id:
         type: string
     required:
-    - id
+    - emissor_id
     type: object
   model.EmissorDocumentoRequest:
     properties:

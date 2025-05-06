@@ -2267,9 +2267,6 @@
                 "emissor_id": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "string"
-                },
                 "nome": {
                     "type": "string"
                 },
@@ -2287,10 +2284,10 @@
         "model.EmissorDeleteRequest": {
             "type": "object",
             "required": [
-                "id"
+                "emissor_id"
             ],
             "properties": {
-                "id": {
+                "emissor_id": {
                     "type": "string"
                 }
             }
