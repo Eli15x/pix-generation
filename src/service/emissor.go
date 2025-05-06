@@ -7,7 +7,6 @@ import (
 	"pix-generation/src/client"
 	"pix-generation/src/model"
 	"pix-generation/src/repository"
-	"pix-generation/src/utils"
 	"sync"
 
 	"github.com/fatih/structs"
@@ -40,7 +39,6 @@ func GetInstanceEmissor() ServiceEmissor {
 func (e *Emissor) CreateEmissor(ctx context.Context, emissorReceive model.EmissorReceive) error {
 	var emissor model.Emissor
 
-	emissor.EmissorID = utils.CreateCodeId()
 	emissor.Nome = emissorReceive.Nome
 	emissor.Email = emissorReceive.Email
 	emissor.Senha = emissorReceive.Senha
@@ -58,7 +56,7 @@ func (e *Emissor) CreateEmissor(ctx context.Context, emissorReceive model.Emisso
 
 func (e *Emissor) GetEmissorByID(ctx context.Context, id string) (model.Emissor, error) {
 	var emissor model.Emissor
-	filter := map[string]interface{}{"EmissorID": id}
+	filter := map[string]interface{}{"ID": id}
 
 	emissor, err := repository.GetInstanceEmissor().FindOne(ctx, "Emissor", filter)
 	if err != nil {
@@ -79,7 +77,7 @@ func (e *Emissor) GetAllEmissor(ctx context.Context) ([]model.Emissor, error) {
 }
 
 func (e *Emissor) UpdateEmissor(ctx context.Context, id string, update model.EmissorReceive) error {
-	filter := bson.M{"EmissorID": id}
+	filter := bson.M{"ID": id}
 	updateData := structs.Map(update)
 	_, err := client.GetInstance().UpdateOne(ctx, "Emissor", filter, updateData)
 	if err != nil {
@@ -90,7 +88,7 @@ func (e *Emissor) UpdateEmissor(ctx context.Context, id string, update model.Emi
 }
 
 func (e *Emissor) DeleteEmissor(ctx context.Context, id string) error {
-	filter := map[string]interface{}{"EmissorID": id}
+	filter := map[string]interface{}{"ID": id}
 
 	err := client.GetInstance().Remove(ctx, "Emissor", filter)
 	if err != nil {

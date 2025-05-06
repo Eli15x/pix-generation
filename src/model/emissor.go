@@ -8,7 +8,6 @@ import (
 
 type Emissor struct {
 	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	EmissorID      string             `bson:"EmissorID,omitempty" json:"emissor_id,omitempty"`
 	Nome           string             `bson:"Nome" json:"nome"`
 	Email          string             `bson:"Email" json:"email"`
 	Senha          string             `bson:"Senha" json:"senha"`
