@@ -1,20 +1,15 @@
 package model
 
-import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
-)
-
 type Usuario struct {
-	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	UsuarioID string             `bson:"UsuarioID" json:"usuario_id"`
-	UserID    string             `bson:"UserID" json:"user_id"`
-	Nome      string             `bson:"nome" json:"nome"`
-	Email     string             `bson:"email" json:"email"`
-	Senha     string             `bson:"senha" json:"senha"`
-	Nivel     int                `bson:"nivel" json:"nivel"`
-	Setor     string             `bson:"setor" json:"setor"`
-	Celular   string             `bson:"celular" json:"celular"`
-	Loja      string             `bson:"loja" json:"loja"`
+	UsuarioID string `bson:"UsuarioID" json:"usuario_id"`
+	UserID    string `bson:"UserID" json:"user_id"`
+	Nome      string `bson:"nome" json:"nome"`
+	Email     string `bson:"email" json:"email"`
+	Senha     string `bson:"senha" json:"senha"`
+	Nivel     int    `bson:"nivel" json:"nivel"`
+	Setor     string `bson:"setor" json:"setor"`
+	Celular   string `bson:"celular" json:"celular"`
+	Loja      string `bson:"loja" json:"loja"`
 }
 
 type UsuarioReceive struct {
