@@ -39,6 +39,7 @@ func GetInstanceUsuario() ServiceUsuario {
 func (u *Usuario) CreateUsuario(ctx context.Context, usuarioReceive model.UsuarioReceive) error {
 	usuario := model.Usuario{
 		UsuarioID: utils.CreateCodeId(),
+		UserID:    usuarioReceive.UserID,
 		Nome:      usuarioReceive.Nome,
 		Email:     usuarioReceive.Email,
 		Senha:     usuarioReceive.Senha,
@@ -67,9 +68,10 @@ func (u *Usuario) GetAllUsuario(ctx context.Context) ([]model.Usuario, error) {
 }
 
 func (u *Usuario) UpdateUsuario(ctx context.Context, id string, usuario model.UsuarioReceive) error {
-	filter := bson.M{"usuarioID": id}
+	filter := bson.M{"UsuarioID": id}
 	updateData := bson.M{
 		"$set": bson.M{
+			"UserID":  usuario.UserID,
 			"nome":    usuario.Nome,
 			"email":   usuario.Email,
 			"senha":   usuario.Senha,

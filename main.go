@@ -88,14 +88,6 @@ func main() {
 		protected.DELETE("/user", userHandler.DeleteUser)
 		protected.GET("/users", userHandler.GetAllUsers)
 
-		// Emissor
-		protected.POST("/emissor", emissorHandler.CreateEmissor)
-		protected.GET("/emissor/id/:id", emissorHandler.GetEmissorByID)
-		protected.GET("/emissor", emissorHandler.GetAllEmissor)
-		protected.PUT("/emissor/id/:id", emissorHandler.UpdateEmissor)
-		protected.DELETE("/emissor", emissorHandler.DeleteEmissor)
-		protected.POST("/emissor/documento", emissorHandler.GetEmissorByDocumento)
-
 		// Client
 		protected.POST("/client", clientHandler.CreateClient)
 		protected.GET("/client/id/:id", clientHandler.GetClientByID)

@@ -5,18 +5,12 @@ definitions:
       celular:
         type: string
       clientID:
-        description: ver qual o motivo disso aqui, ta tentando simular o valor do
-          mongo?
         type: string
       cpf:
         type: string
       created_at:
         type: string
       email:
-        type: string
-      id:
-        description: ver qual o motivo disso aqui, ta tentando simular o valor do
-          mongo?
         type: string
       nome:
         type: string
@@ -52,58 +46,6 @@ definitions:
     - cpf
     - email
     - nome
-    type: object
-  model.Emissor:
-    properties:
-      created_at:
-        type: string
-      documento:
-        type: string
-      email:
-        type: string
-      emissor_id:
-        type: string
-      nome:
-        type: string
-      senha:
-        type: string
-      token_confra_pix:
-        type: string
-      updated_at:
-        type: string
-    type: object
-  model.EmissorDeleteRequest:
-    properties:
-      emissor_id:
-        type: string
-    required:
-    - emissor_id
-    type: object
-  model.EmissorDocumentoRequest:
-    properties:
-      documento:
-        type: string
-    required:
-    - documento
-    type: object
-  model.EmissorReceive:
-    properties:
-      documento:
-        type: string
-      email:
-        type: string
-      nome:
-        type: string
-      senha:
-        type: string
-      token_confra_pix:
-        type: string
-    required:
-    - documento
-    - email
-    - nome
-    - senha
-    - token_confra_pix
     type: object
   model.ExpenseCenter:
     properties:
@@ -283,11 +225,11 @@ definitions:
         type: string
       email:
         type: string
-      id:
-        type: string
       name:
         type: string
       password:
+        type: string
+      token_confra_pix:
         type: string
       user_id:
         type: string
@@ -586,204 +528,6 @@ paths:
       summary: Atualiza cliente
       tags:
       - client
-  /emissor:
-    delete:
-      consumes:
-      - application/json
-      description: Remove um emissor com base no EmissorID
-      parameters:
-      - description: EmissorID do emissor
-        in: body
-        name: emissor
-        required: true
-        schema:
-          $ref: '#/definitions/model.EmissorDeleteRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Deleta emissor
-      tags:
-      - emissor
-    get:
-      consumes:
-      - application/json
-      description: Retorna todos os emissores cadastrados
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/model.Emissor'
-            type: array
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Busca todos os emissores
-      tags:
-      - emissor
-    post:
-      consumes:
-      - application/json
-      description: Cria um novo emissor com nome, email, senha, documento e tokenConfraPix
-      parameters:
-      - description: Dados do emissor
-        in: body
-        name: emissor
-        required: true
-        schema:
-          $ref: '#/definitions/model.EmissorReceive'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Cria um novo emissor
-      tags:
-      - emissor
-  /emissor/documento:
-    post:
-      consumes:
-      - application/json
-      description: Retorna um emissor com base no Documento (enviado via body)
-      parameters:
-      - description: Documento do emissor
-        in: body
-        name: documento
-        required: true
-        schema:
-          $ref: '#/definitions/model.EmissorDocumentoRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.Emissor'
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Busca emissor por Documento
-      tags:
-      - emissor
-  /emissor/id/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Retorna um emissor com base no EmissorID
-      parameters:
-      - description: EmissorID do emissor
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.Emissor'
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Busca emissor por ID
-      tags:
-      - emissor
-    put:
-      consumes:
-      - application/json
-      description: Atualiza dados de um emissor pelo EmissorID
-      parameters:
-      - description: EmissorID do emissor
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Novos dados do emissor
-        in: body
-        name: emissor
-        required: true
-        schema:
-          $ref: '#/definitions/model.EmissorReceive'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Atualiza emissor
-      tags:
-      - emissor
   /expense-center:
     delete:
       consumes:
