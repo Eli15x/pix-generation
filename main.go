@@ -55,7 +55,6 @@ func main() {
 	// Injeção dos services
 	userService := service.GetInstanceUser()
 	invoiceService := service.GetInstanceInvoice()
-	emissorService := service.GetInstanceEmissor()
 	clientService := service.GetInstanceClient()
 	signatureService := service.GetInstanceSignature()
 	operacaoService := service.GetInstanceOperacao()
@@ -64,7 +63,6 @@ func main() {
 	// Injeção dos handlers
 	userHandler := handler.NewUserHandler(userService)
 	invoiceHandler := handler.NewInvoiceHandler(invoiceService)
-	emissorHandler := handler.NewEmissorHandler(emissorService)
 	clientHandler := handler.NewClientHandler(clientService)
 	signatureHandler := handler.NewSignatureHandler(signatureService)
 	operacaoHandler := handler.NewOperacaoHandler(operacaoService)
