@@ -81,7 +81,7 @@ func main() {
 		protected.POST("/invoice/cnpj", invoiceHandler.GetByCnpj)
 		protected.DELETE("/invoice/:startDate/:endDate/", invoiceHandler.DeleteInvoice)
 
-		protected.GET("/user", userHandler.GetUserByID)
+		protected.POST("/user", userHandler.GetUserByID)
 		protected.PUT("/user", userHandler.UpdateUser)
 		protected.DELETE("/user", userHandler.DeleteUser)
 		protected.GET("/users", userHandler.GetAllUsers)
