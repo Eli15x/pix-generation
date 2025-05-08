@@ -2376,6 +2376,7 @@ var SwaggerInfo = &swag.Spec{
 	Title:            "Pix Generation API",
 	Description:      "API para controle de usuários e invoices com autenticação JWT.",
 	InfoInstanceName: "swagger",
+	SwaggerTemplate:  docTemplate,
 }
 
 func init() {
