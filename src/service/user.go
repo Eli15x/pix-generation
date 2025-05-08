@@ -88,7 +88,7 @@ func (u *user) ValidateUser(ctx context.Context, email string, password string) 
 func (u *user) GetUser(ctx context.Context, id string) (model.User, error) {
 	var user model.User
 
-	userId := map[string]interface{}{"UserId": id}
+	userId := map[string]interface{}{"UserID": id}
 
 	user, err := repository.GetInstanceUser().FindOne(ctx, "user", userId)
 	if err != nil {
