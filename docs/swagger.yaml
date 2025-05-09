@@ -16,6 +16,8 @@ definitions:
         type: string
       updated_at:
         type: string
+      user_id:
+        type: string
     type: object
   model.ClientCpfRequest:
     properties:
@@ -40,6 +42,8 @@ definitions:
       email:
         type: string
       nome:
+        type: string
+      user_id:
         type: string
     required:
     - celular

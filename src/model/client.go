@@ -6,6 +6,7 @@ import (
 
 type Client struct {
 	ClientID  string    `bson:"clientID,omitempty" json:"clientID,omitempty"`
+	UserID    string    `bson:"UserID" json:"user_id"`
 	Nome      string    `bson:"nome" json:"nome"`
 	CPF       string    `bson:"cpf" json:"cpf"`
 	Email     string    `bson:"email" json:"email"`
@@ -15,6 +16,7 @@ type Client struct {
 }
 
 type ClientReceive struct {
+	UserID  string `bson:"UserID" json:"user_id"`
 	Nome    string `json:"nome" binding:"required"`
 	CPF     string `json:"cpf" binding:"required"`
 	Email   string `json:"email" binding:"required"`

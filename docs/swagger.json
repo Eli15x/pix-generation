@@ -1899,6 +1899,9 @@
                 },
                 "updated_at": {
                     "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
                 }
             }
         },
@@ -1943,6 +1946,9 @@
                     "type": "string"
                 },
                 "nome": {
+                    "type": "string"
+                },
+                "user_id": {
                     "type": "string"
                 }
             }
