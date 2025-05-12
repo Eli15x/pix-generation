@@ -41,6 +41,7 @@ func (c *Client) CreateClient(ctx context.Context, clientReceive model.ClientRec
 	var clientStruct model.Client
 
 	clientStruct.ClientID = utils.CreateCodeId()
+	clientStruct.UserID = clientReceive.UserID
 	clientStruct.Nome = clientReceive.Nome
 	clientStruct.CPF = clientReceive.CPF
 	clientStruct.Email = clientReceive.Email
