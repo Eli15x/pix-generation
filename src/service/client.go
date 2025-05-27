@@ -22,6 +22,7 @@ var (
 type ServiceClient interface {
 	CreateClient(ctx context.Context, client model.ClientReceive) error
 	GetClientByID(ctx context.Context, id string) (model.Client, error)
+	GetClientByUserID(ctx context.Context, id string) (model.Client, error)
 	GetAllClient(ctx context.Context) ([]model.Client, error)
 	UpdateClient(ctx context.Context, id string, update model.ClientReceive) error
 	DeleteClient(ctx context.Context, id string) error
@@ -61,6 +62,17 @@ func (c *Client) CreateClient(ctx context.Context, clientReceive model.ClientRec
 func (c *Client) GetClientByID(ctx context.Context, id string) (model.Client, error) {
 	var client model.Client
 	filter := map[string]interface{}{"ClientID": id}
+
+	client, err := repository.GetInstanceClient().FindOne(ctx, "Client", filter)
+	if err != nil {
+		return client, errors.New("Get Client: problem to find by ClientID")
+	}
+	return client, nil
+}
+
+func (c *Client) GetClientByUserID(ctx context.Context, id string) (model.Client, error) {
+	var client model.Client
+	filter := map[string]interface{}{"UserID": id}
 
 	client, err := repository.GetInstanceClient().FindOne(ctx, "Client", filter)
 	if err != nil {

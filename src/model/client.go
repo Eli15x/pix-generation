@@ -5,7 +5,7 @@ import (
 )
 
 type Client struct {
-	ClientID  string    `bson:"clientID,omitempty" json:"clientID,omitempty"`
+	ClientID  string    `bson:"ClientID,omitempty" json:"client_id,omitempty"`
 	UserID    string    `bson:"UserID" json:"user_id"`
 	Nome      string    `bson:"nome" json:"nome"`
 	CPF       string    `bson:"cpf" json:"cpf"`
@@ -23,8 +23,12 @@ type ClientReceive struct {
 	Celular string `json:"celular" binding:"required"`
 }
 
-type ClientDeleteRequest struct {
+type ClientRequest struct {
 	ID string `json:"id" binding:"required"`
+}
+
+type ClientUserRequest struct {
+	UserID string `json:"user_id" binding:"required"`
 }
 
 type ClientCpfRequest struct {

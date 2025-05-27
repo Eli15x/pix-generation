@@ -59,6 +59,7 @@ func main() {
 	signatureService := service.GetInstanceSignature()
 	operacaoService := service.GetInstanceOperacao()
 	usuarioService := service.GetInstanceUsuario()
+	expenseCenterService := service.GetInstanceExpenseCenter()
 
 	// Injeção dos handlers
 	userHandler := handler.NewUserHandler(userService)
@@ -67,6 +68,7 @@ func main() {
 	signatureHandler := handler.NewSignatureHandler(signatureService)
 	operacaoHandler := handler.NewOperacaoHandler(operacaoService)
 	usuarioHandler := handler.NewUsuarioHandler(usuarioService)
+	expenseCenterHandler := handler.NewExpenseCenterHandler(expenseCenterService)
 
 	// Rotas públicas
 	r.POST("/login", userHandler.ValidateUser)
@@ -88,7 +90,8 @@ func main() {
 
 		// Client
 		protected.POST("/client", clientHandler.CreateClient)
-		protected.GET("/client/id/:id", clientHandler.GetClientByID)
+		protected.GET("/client/id", clientHandler.GetClientByID)
+		protected.GET("/client/user", clientHandler.GetClientByUserID)
 		protected.GET("/client", clientHandler.GetAllClient)
 		protected.PUT("/client/id/:id", clientHandler.UpdateClient)
 		protected.DELETE("/client", clientHandler.DeleteClient)
@@ -116,6 +119,11 @@ func main() {
 		protected.PUT("/usuario/id/:id", usuarioHandler.UpdateUsuario)
 		protected.DELETE("/usuario", usuarioHandler.DeleteUsuario)
 		protected.POST("/usuario/email", usuarioHandler.GetUsuarioByEmail)
+
+		protected.POST("/expensecenter", expenseCenterHandler.CreateExpenseCenter)
+		protected.GET("/expensecenter/id/:id", expenseCenterHandler.GetExpenseCenterByID)
+		protected.PUT("/expensecenter/id/:id", expenseCenterHandler.UpdateExpenseCenter)
+		protected.DELETE("/expensecenter/id/:id", expenseCenterHandler.DeleteExpenseCenter)
 
 	}
 

@@ -89,3 +89,33 @@ func (h *ExpenseCenterHandler) DeleteExpenseCenter(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"status": "Expense center deleted"})
 }
+
+// UpdateExpenseCenter godoc
+// @Summary      Atualiza centro de custo
+// @Description  Atualiza os dados de um centro de custo pelo ID
+// @Tags         expense_centers
+// @Accept       json
+// @Produce      json
+// @Param        id              path  string                     true  "CentroExpenseID"
+// @Param        expense_center  body  model.ExpenseCenterReceive true  "Dados atualizados"
+// @Success      200  {object}  map[string]string
+// @Failure      400  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /expense-center/id/{id} [put]
+func (h *ExpenseCenterHandler) UpdateExpenseCenter(c *gin.Context) {
+	id := c.Param("id")
+
+	var update model.ExpenseCenterReceive
+	if err := c.ShouldBindJSON(&update); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := h.service.UpdateExpenseCenter(context.Background(), id, update)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "Expense center updated"})
+}
