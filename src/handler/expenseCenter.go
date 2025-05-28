@@ -65,6 +65,43 @@ func (h *ExpenseCenterHandler) GetExpenseCenterByID(c *gin.Context) {
 	c.JSON(http.StatusOK, center)
 }
 
+// GetAllClient godoc
+// @Summary Busca todos os clientes
+// @Description Retorna todos os clientes
+// @Tags client
+// @Accept json
+// @Produce json
+// @Success 200 {array} model.Client
+// @Failure 500 {object} map[string]string
+// @Router /client [get]
+func (h *ClientHandler) GetAllExpenseCenter(c *gin.Context) {
+	centers, err := h.service.GetAllClient(context.Background())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, centers)
+}
+
+// GetExpenseCenterByID godoc
+// @Summary      Busca centro de custo
+// @Description  Retorna centro de custo por ID
+// @Tags         expense_centers
+// @Accept       json
+// @Produce      json
+// @Param        id  path      string  true  "CentroExpenseID"
+// @Success      200 {object}  model.ExpenseCenter
+// @Failure      404 {object}  map[string]string
+// @Router       /expense-center/id/{id} [get]
+func (h *ExpenseCenterHandler) GetAllExpenseCenter(c *gin.Context) { //criar para pegar de todos
+	center, err := h.service.GetAllExpenseCenter(context.Background())
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, center)
+}
+
 // DeleteExpenseCenter godoc
 // @Summary      Deleta centro de custo
 // @Description  Remove um centro de custo pelo ID

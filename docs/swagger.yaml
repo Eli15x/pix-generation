@@ -4,7 +4,7 @@ definitions:
     properties:
       celular:
         type: string
-      clientID:
+      client_id:
         type: string
       cpf:
         type: string
@@ -26,13 +26,6 @@ definitions:
     required:
     - cpf
     type: object
-  model.ClientDeleteRequest:
-    properties:
-      id:
-        type: string
-    required:
-    - id
-    type: object
   model.ClientReceive:
     properties:
       celular:
@@ -50,6 +43,20 @@ definitions:
     - cpf
     - email
     - nome
+    type: object
+  model.ClientRequest:
+    properties:
+      id:
+        type: string
+    required:
+    - id
+    type: object
+  model.ClientUserRequest:
+    properties:
+      user_id:
+        type: string
+    required:
+    - user_id
     type: object
   model.ExpenseCenter:
     properties:
@@ -345,7 +352,7 @@ paths:
         name: client
         required: true
         schema:
-          $ref: '#/definitions/model.ClientDeleteRequest'
+          $ref: '#/definitions/model.ClientRequest'
       produces:
       - application/json
       responses:
@@ -395,7 +402,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Cria um novo cliente
+      description: Cria um novo cliente vinculado a um usuário já existente
       parameters:
       - description: Dados do cliente
         in: body
@@ -411,13 +418,19 @@ paths:
           schema:
             type: string
         "400":
-          description: Bad Request
+          description: Erro de validação nos dados enviados
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Usuário vinculado não encontrado
           schema:
             additionalProperties:
               type: string
             type: object
         "500":
-          description: Internal Server Error
+          description: Erro interno ao criar cliente
           schema:
             additionalProperties:
               type: string
@@ -463,13 +476,14 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retorna um cliente pelo ID
+      description: Retorna um cliente pelo UserID
       parameters:
-      - description: ID do cliente
-        in: path
-        name: id
+      - description: Dados do cliente
+        in: body
+        name: client
         required: true
-        type: string
+        schema:
+          $ref: '#/definitions/model.ClientUserRequest'
       produces:
       - application/json
       responses:
@@ -489,7 +503,7 @@ paths:
             additionalProperties:
               type: string
             type: object
-      summary: Busca cliente por ID
+      summary: Busca cliente por UserID
       tags:
       - client
     put:
@@ -626,6 +640,46 @@ paths:
               type: string
             type: object
       summary: Busca centro de custo
+      tags:
+      - expense_centers
+    put:
+      consumes:
+      - application/json
+      description: Atualiza os dados de um centro de custo pelo ID
+      parameters:
+      - description: CentroExpenseID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Dados atualizados
+        in: body
+        name: expense_center
+        required: true
+        schema:
+          $ref: '#/definitions/model.ExpenseCenterReceive'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Atualiza centro de custo
       tags:
       - expense_centers
   /invoice:
@@ -1099,7 +1153,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Cria uma nova assinatura
+      description: Cria uma nova assinatura vinculada a um cliente e centro de custo
       parameters:
       - description: Dados da assinatura
         in: body
@@ -1114,14 +1168,14 @@ paths:
           description: ok
           schema:
             type: string
-        "400":
-          description: Bad Request
+        "404":
+          description: Erro de validação ou cliente/centro de custo não encontrado
           schema:
             additionalProperties:
               type: string
             type: object
         "500":
-          description: Internal Server Error
+          description: Erro interno ao criar assinatura
           schema:
             additionalProperties:
               type: string

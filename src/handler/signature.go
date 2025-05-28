@@ -12,24 +12,28 @@ import (
 
 // SignatureHandler define o handler
 type SignatureHandler struct {
-	service service.ServiceSignature
+	service       service.ServiceSignature
+	clientService service.ServiceClient
 }
 
-// NewSignatureHandler cria um novo handler
-func NewSignatureHandler(s service.ServiceSignature) *SignatureHandler {
-	return &SignatureHandler{service: s}
+// NewSignatureHandler cria um novo handler com dependência do clientService
+func NewSignatureHandler(s service.ServiceSignature, c service.ServiceClient) *SignatureHandler {
+	return &SignatureHandler{
+		service:       s,
+		clientService: c,
+	}
 }
 
 // CreateSignature godoc
 // @Summary      Cria uma nova assinatura
-// @Description  Cria uma nova assinatura
+// @Description  Cria uma nova assinatura vinculada a um cliente e centro de custo
 // @Tags         signature
 // @Accept       json
 // @Produce      json
 // @Param        signature  body      model.SignatureReceive  true  "Dados da assinatura"
-// @Success      200        {string}  string "ok"
-// @Failure      400        {object}  map[string]string
-// @Failure      500        {object}  map[string]string
+// @Success      200        {string}  string  "ok"
+// @Failure      404        {object}  map[string]string  "Erro de validação ou cliente/centro de custo não encontrado"
+// @Failure      500        {object}  map[string]string  "Erro interno ao criar assinatura"
 // @Router       /signature [post]
 func (h *SignatureHandler) CreateSignature(c *gin.Context) {
 	var req model.SignatureReceive
@@ -37,7 +41,18 @@ func (h *SignatureHandler) CreateSignature(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.CreateSignature(context.Background(), req)
+
+	_, err := h.clientService.GetClientByID(context.Background(), req.ClienteID)
+	if err != nil {
+		if err.Error() == "Get Client: not exists client with this id" {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Cliente não encontrado"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = h.service.CreateSignature(context.Background(), req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

@@ -67,6 +67,20 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	}
 
 	ctx := c.Request.Context()
+
+	existingUser, err := h.service.GetUserByEmail(ctx, user.Email)
+	if err == nil && existingUser.Email != "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Já existe um usuário com esse e-mail"})
+		return
+	}
+
+	// Verifica se já existe um usuário com esse documento
+	existingUserByDocument, err := h.service.GetUserByDocument(ctx, user.Document)
+	if err == nil && existingUserByDocument.Document != "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Já existe um usuário com esse documento"})
+		return
+	}
+
 	response, err := h.service.CreateUser(ctx, user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

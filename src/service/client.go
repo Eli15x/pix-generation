@@ -67,6 +67,11 @@ func (c *Client) GetClientByID(ctx context.Context, id string) (model.Client, er
 	if err != nil {
 		return client, errors.New("Get Client: problem to find by ClientID")
 	}
+
+	if client == (model.Client{}) {
+		return model.Client{}, errors.New("Get Client: not exists client with this id")
+	}
+
 	return client, nil
 }
 
@@ -78,6 +83,7 @@ func (c *Client) GetClientByUserID(ctx context.Context, id string) (model.Client
 	if err != nil {
 		return client, errors.New("Get Client: problem to find by ClientID")
 	}
+
 	return client, nil
 }
 

@@ -10,34 +10,49 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ClientHandler define o handler
 type ClientHandler struct {
-	service service.ServiceClient
+	service     service.ServiceClient
+	serviceUser service.ServiceUser
 }
 
-// NewClientHandler cria um novo handler
-func NewClientHandler(s service.ServiceClient) *ClientHandler {
-	return &ClientHandler{service: s}
+func NewClientHandler(s service.ServiceClient, su service.ServiceUser) *ClientHandler {
+	return &ClientHandler{
+		service:     s,
+		serviceUser: su,
+	}
 }
 
 // CreateClient godoc
-// @Summary Cria um novo cliente
-// @Description Cria um novo cliente
-// @Tags client
-// @Accept json
-// @Produce json
-// @Param client body model.ClientReceive true "Dados do cliente"
-// @Success 200 {string} string "ok"
-// @Failure 400 {object} map[string]string
-// @Failure 500 {object} map[string]string
-// @Router /client [post]
+// @Summary      Cria um novo cliente
+// @Description  Cria um novo cliente vinculado a um usuário já existente
+// @Tags         client
+// @Accept       json
+// @Produce      json
+// @Param        client  body      model.ClientReceive  true  "Dados do cliente"
+// @Success      200     {string}  string  "ok"
+// @Failure      400     {object}  map[string]string  "Erro de validação nos dados enviados"
+// @Failure      404     {object}  map[string]string  "Usuário vinculado não encontrado"
+// @Failure      500     {object}  map[string]string  "Erro interno ao criar cliente"
+// @Router       /client [post]
 func (h *ClientHandler) CreateClient(c *gin.Context) {
 	var req model.ClientReceive
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.CreateClient(context.Background(), req)
+
+	_, err := h.serviceUser.GetUserByID(context.Background(), req.UserID)
+	if err != nil {
+		if err.Error() == "GetUserByID: not exists user with this id" {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Usuário não encontrado"})
+			return
+		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = h.service.CreateClient(context.Background(), req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

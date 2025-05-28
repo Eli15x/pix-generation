@@ -2,22 +2,20 @@ package model
 
 import (
 	"time"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Signature struct {
-	SignatureID    string             `bson:"signatureID" json:"signature_id"`
-	ClienteID      string             `bson:"ClienteID" json:"cliente_id"`
-	DiaLancamento  int                `bson:"Dia_lancamento" json:"dia_lancamento"`
-	DiaVencimento  int                `bson:"Dia_vencimento" json:"dia_vencimento"`
-	QtdParcelas    int                `bson:"Qdta_parcelas" json:"qtd_parcelas"`
-	CentroCustoID  primitive.ObjectID `bson:"CentroCusto" json:"centro_custo"`
-	ValorOperacao  float64            `bson:"ValorOperacao" json:"valor_operacao"`
-	EmitidoEsteMes bool               `bson:"EmitidoEsteMes" json:"emitido_este_mes"`
-	VencidoEsteMes bool               `bson:"VencidoEsteMes" json:"vencido_este_mes"`
-	CreatedAt      time.Time          `bson:"CreatedAt" json:"created_at"`
-	UpdatedAt      time.Time          `bson:"UpdatedAt" json:"updated_at"`
+	SignatureID    string    `bson:"signatureID" json:"signature_id"`
+	ClienteID      string    `bson:"ClienteID" json:"cliente_id"`
+	DiaLancamento  int       `bson:"Dia_lancamento" json:"dia_lancamento"`
+	DiaVencimento  int       `bson:"Dia_vencimento" json:"dia_vencimento"`
+	QtdParcelas    int       `bson:"Qdta_parcelas" json:"qtd_parcelas"`
+	CentroCustoID  string    `bson:"CentroCusto" json:"centro_custo"`
+	ValorOperacao  float64   `bson:"ValorOperacao" json:"valor_operacao"`
+	EmitidoEsteMes bool      `bson:"EmitidoEsteMes" json:"emitido_este_mes"`
+	VencidoEsteMes bool      `bson:"VencidoEsteMes" json:"vencido_este_mes"`
+	CreatedAt      time.Time `bson:"CreatedAt" json:"created_at"`
+	UpdatedAt      time.Time `bson:"UpdatedAt" json:"updated_at"`
 }
 
 type SignatureReceive struct {

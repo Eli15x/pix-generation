@@ -24,6 +24,7 @@ type ServiceExpenseCenter interface {
 	GetExpenseCenterByID(ctx context.Context, id string) (model.ExpenseCenter, error)
 	UpdateExpenseCenter(ctx context.Context, id string, update model.ExpenseCenterReceive) error
 	DeleteExpenseCenter(ctx context.Context, id string) error
+	GetAllExpenseCenter(ctx context.Context) ([]model.ExpenseCenter, error)
 }
 
 type ExpenseCenter struct{}
@@ -85,4 +86,14 @@ func (e *ExpenseCenter) DeleteExpenseCenter(ctx context.Context, id string) erro
 		return errors.New("Delete ExpenseCenter: problem to delete from MongoDB")
 	}
 	return nil
+}
+
+func (e *ExpenseCenter) GetAllExpenseCenter(ctx context.Context) ([]model.ExpenseCenter, error) {
+	filter := map[string]interface{}{}
+
+	centers, err := repository.GetInstanceExpenseCenter().Find(ctx, "ExpenseCenter", filter)
+	if err != nil {
+		return nil, errors.New("Get All Clients: problem to find in MongoDB")
+	}
+	return centers, nil
 }

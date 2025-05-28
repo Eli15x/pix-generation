@@ -64,8 +64,8 @@ func main() {
 	// Injeção dos handlers
 	userHandler := handler.NewUserHandler(userService)
 	invoiceHandler := handler.NewInvoiceHandler(invoiceService)
-	clientHandler := handler.NewClientHandler(clientService)
-	signatureHandler := handler.NewSignatureHandler(signatureService)
+	clientHandler := handler.NewClientHandler(clientService, userService)
+	signatureHandler := handler.NewSignatureHandler(signatureService, clientService)
 	operacaoHandler := handler.NewOperacaoHandler(operacaoService)
 	usuarioHandler := handler.NewUsuarioHandler(usuarioService)
 	expenseCenterHandler := handler.NewExpenseCenterHandler(expenseCenterService)
@@ -124,6 +124,7 @@ func main() {
 		protected.GET("/expensecenter/id/:id", expenseCenterHandler.GetExpenseCenterByID)
 		protected.PUT("/expensecenter/id/:id", expenseCenterHandler.UpdateExpenseCenter)
 		protected.DELETE("/expensecenter/id/:id", expenseCenterHandler.DeleteExpenseCenter)
+		protected.GET("/expenseCenter", expenseCenterHandler.GetAllExpenseCenter)
 
 	}
 

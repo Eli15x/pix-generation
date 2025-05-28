@@ -33,6 +33,8 @@ type ServiceUser interface {
 	GetUser(ctx context.Context, id string) (model.User, error)
 	GetUserByName(ctx context.Context, name string) (model.User, error)
 	GetUserByEmail(ctx context.Context, email string) (model.User, error)
+	GetUserByDocument(ctx context.Context, document string) (model.User, error)
+	GetUserByID(ctx context.Context, id string) (model.User, error)
 	GetUsersByClientId(ctx context.Context, idAcess int) ([]model.User, error)
 	GetUsers(ctx context.Context) ([]model.User, error)
 
@@ -131,6 +133,30 @@ func (u *user) GetUserByEmail(ctx context.Context, email string) (model.User, er
 		return model.User{}, errors.New("Get Users By Acess: problem to Find Id into MongoDB")
 	}
 
+	return user, nil
+}
+
+func (u *user) GetUserByID(ctx context.Context, id string) (model.User, error) {
+	filter := map[string]interface{}{"UserID": id}
+	fmt.Println(id)
+	user, err := repository.GetInstanceUser().FindOne(ctx, "user", filter)
+	if err != nil {
+		return model.User{}, errors.New("GetUserByID: problem to find user by UserID in MongoDB")
+	}
+
+	if user == (model.User{}) {
+		return model.User{}, errors.New("GetUserByID: not exists user with this id")
+	}
+
+	return user, nil
+}
+
+func (u *user) GetUserByDocument(ctx context.Context, document string) (model.User, error) {
+	filter := map[string]interface{}{"Document": document}
+	user, err := repository.GetInstanceUser().FindOne(ctx, "user", filter)
+	if err != nil {
+		return model.User{}, errors.New("GetUserByDocument: problem to find user by document in MongoDB")
+	}
 	return user, nil
 }
 

@@ -39,10 +39,6 @@ func GetInstanceSignature() ServiceSignature {
 }
 
 func (s *Signature) CreateSignature(ctx context.Context, signatureReceive model.SignatureReceive) error {
-	centroCustoObjectID, err := primitive.ObjectIDFromHex(signatureReceive.CentroCustoID)
-	if err != nil {
-		return errors.New("Create Signature: invalid CentroCustoID")
-	}
 
 	signature := model.Signature{
 		SignatureID:    utils.CreateCodeId(),
@@ -50,7 +46,7 @@ func (s *Signature) CreateSignature(ctx context.Context, signatureReceive model.
 		DiaLancamento:  signatureReceive.DiaLancamento,
 		DiaVencimento:  signatureReceive.DiaVencimento,
 		QtdParcelas:    signatureReceive.QtdParcelas,
-		CentroCustoID:  centroCustoObjectID,
+		CentroCustoID:  signatureReceive.CentroCustoID,
 		ValorOperacao:  signatureReceive.ValorOperacao,
 		EmitidoEsteMes: false,
 		VencidoEsteMes: false,
@@ -59,7 +55,7 @@ func (s *Signature) CreateSignature(ctx context.Context, signatureReceive model.
 	}
 
 	signatureMap := structs.Map(signature)
-	_, err = client.GetInstance().Insert(ctx, "Signature", signatureMap)
+	_, err := client.GetInstance().Insert(ctx, "Signature", signatureMap)
 	if err != nil {
 		return errors.New("Create Signature: problem to insert into MongoDB")
 	}

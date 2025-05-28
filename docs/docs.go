@@ -54,7 +54,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Cria um novo cliente",
+                "description": "Cria um novo cliente vinculado a um usuário já existente",
                 "consumes": [
                     "application/json"
                 ],
@@ -84,7 +84,16 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "Erro de validação nos dados enviados",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário vinculado não encontrado",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -93,7 +102,7 @@ const docTemplate = `{
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Erro interno ao criar cliente",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -122,7 +131,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.ClientDeleteRequest"
+                            "$ref": "#/definitions/model.ClientRequest"
                         }
                     }
                 ],
@@ -211,7 +220,7 @@ const docTemplate = `{
         },
         "/client/id/{id}": {
             "get": {
-                "description": "Retorna um cliente pelo ID",
+                "description": "Retorna um cliente pelo UserID",
                 "consumes": [
                     "application/json"
                 ],
@@ -221,14 +230,16 @@ const docTemplate = `{
                 "tags": [
                     "client"
                 ],
-                "summary": "Busca cliente por ID",
+                "summary": "Busca cliente por UserID",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "ID do cliente",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
+                        "description": "Dados do cliente",
+                        "name": "client",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ClientUserRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -455,6 +466,66 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Atualiza os dados de um centro de custo pelo ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "expense_centers"
+                ],
+                "summary": "Atualiza centro de custo",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "CentroExpenseID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Dados atualizados",
+                        "name": "expense_center",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ExpenseCenterReceive"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -1122,7 +1193,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Cria uma nova assinatura",
+                "description": "Cria uma nova assinatura vinculada a um cliente e centro de custo",
                 "consumes": [
                     "application/json"
                 ],
@@ -1151,8 +1222,8 @@ const docTemplate = `{
                             "type": "string"
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Erro de validação ou cliente/centro de custo não encontrado",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -1161,7 +1232,7 @@ const docTemplate = `{
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Erro interno ao criar assinatura",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -1888,7 +1959,7 @@ const docTemplate = `{
                 "celular": {
                     "type": "string"
                 },
-                "clientID": {
+                "client_id": {
                     "type": "string"
                 },
                 "cpf": {
@@ -1922,17 +1993,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.ClientDeleteRequest": {
-            "type": "object",
-            "required": [
-                "id"
-            ],
-            "properties": {
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
         "model.ClientReceive": {
             "type": "object",
             "required": [
@@ -1954,6 +2014,28 @@ const docTemplate = `{
                 "nome": {
                     "type": "string"
                 },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ClientRequest": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ClientUserRequest": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
                 "user_id": {
                     "type": "string"
                 }
