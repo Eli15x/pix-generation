@@ -2208,7 +2208,7 @@ const docTemplate = `{
         "model.Signature": {
             "type": "object",
             "properties": {
-                "centro_custo": {
+                "centro_custo_id": {
                     "type": "string"
                 },
                 "cliente_id": {
@@ -2268,7 +2268,7 @@ const docTemplate = `{
         "model.SignatureReceive": {
             "type": "object",
             "required": [
-                "centro_custo",
+                "centro_custo_id",
                 "cliente_id",
                 "dia_lancamento",
                 "dia_vencimento",
@@ -2276,7 +2276,7 @@ const docTemplate = `{
                 "valor_operacao"
             ],
             "properties": {
-                "centro_custo": {
+                "centro_custo_id": {
                     "type": "string"
                 },
                 "cliente_id": {

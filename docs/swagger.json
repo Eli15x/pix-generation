@@ -2202,7 +2202,7 @@
         "model.Signature": {
             "type": "object",
             "properties": {
-                "centro_custo": {
+                "centro_custo_id": {
                     "type": "string"
                 },
                 "cliente_id": {
@@ -2262,7 +2262,7 @@
         "model.SignatureReceive": {
             "type": "object",
             "required": [
-                "centro_custo",
+                "centro_custo_id",
                 "cliente_id",
                 "dia_lancamento",
                 "dia_vencimento",
@@ -2270,7 +2270,7 @@
                 "valor_operacao"
             ],
             "properties": {
-                "centro_custo": {
+                "centro_custo_id": {
                     "type": "string"
                 },
                 "cliente_id": {

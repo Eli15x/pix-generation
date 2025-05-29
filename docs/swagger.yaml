@@ -167,7 +167,7 @@ definitions:
     type: object
   model.Signature:
     properties:
-      centro_custo:
+      centro_custo_id:
         type: string
       cliente_id:
         type: string
@@ -206,7 +206,7 @@ definitions:
     type: object
   model.SignatureReceive:
     properties:
-      centro_custo:
+      centro_custo_id:
         type: string
       cliente_id:
         type: string
@@ -219,7 +219,7 @@ definitions:
       valor_operacao:
         type: number
     required:
-    - centro_custo
+    - centro_custo_id
     - cliente_id
     - dia_lancamento
     - dia_vencimento
