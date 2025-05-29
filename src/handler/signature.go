@@ -12,15 +12,17 @@ import (
 
 // SignatureHandler define o handler
 type SignatureHandler struct {
-	service       service.ServiceSignature
-	clientService service.ServiceClient
+	service              service.ServiceSignature
+	clientService        service.ServiceClient
+	expenseCenterService service.ServiceExpenseCenter
 }
 
 // NewSignatureHandler cria um novo handler com dependência do clientService
-func NewSignatureHandler(s service.ServiceSignature, c service.ServiceClient) *SignatureHandler {
+func NewSignatureHandler(s service.ServiceSignature, c service.ServiceClient, ec service.ServiceExpenseCenter) *SignatureHandler {
 	return &SignatureHandler{
-		service:       s,
-		clientService: c,
+		service:              s,
+		clientService:        c,
+		expenseCenterService: ec,
 	}
 }
 
@@ -46,6 +48,16 @@ func (h *SignatureHandler) CreateSignature(c *gin.Context) {
 	if err != nil {
 		if err.Error() == "Get Client: not exists client with this id" {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Cliente não encontrado"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	_, err = h.expenseCenterService.GetExpenseCenterByID(context.Background(), req.CentroCustoID)
+	if err != nil {
+		if err.Error() == "Get ExpenseCenter: not exists expenseCenter with this id" {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Centro Custo não encontrado"})
 			return
 		}
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

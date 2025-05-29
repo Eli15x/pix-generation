@@ -60,6 +60,10 @@ func (e *ExpenseCenter) GetExpenseCenterByID(ctx context.Context, id string) (mo
 	if err != nil {
 		return expense, errors.New("Get ExpenseCenter: problem to find by CentroExpenseId")
 	}
+
+	if expense == (model.ExpenseCenter{}) {
+		return model.ExpenseCenter{}, errors.New("Get ExpenseCenter: not exists expenseCenter with this id")
+	}
 	return expense, nil
 }
 

@@ -65,7 +65,7 @@ func main() {
 	userHandler := handler.NewUserHandler(userService)
 	invoiceHandler := handler.NewInvoiceHandler(invoiceService)
 	clientHandler := handler.NewClientHandler(clientService, userService)
-	signatureHandler := handler.NewSignatureHandler(signatureService, clientService)
+	signatureHandler := handler.NewSignatureHandler(signatureService, clientService, expenseCenterService)
 	operacaoHandler := handler.NewOperacaoHandler(operacaoService)
 	usuarioHandler := handler.NewUsuarioHandler(usuarioService)
 	expenseCenterHandler := handler.NewExpenseCenterHandler(expenseCenterService)
