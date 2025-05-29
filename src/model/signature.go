@@ -5,11 +5,11 @@ import (
 )
 
 type Signature struct {
-	SignatureID    string    `bson:"signatureID" json:"signature_id"`
+	SignatureID    string    `bson:"SignatureID" json:"signature_id"`
 	ClienteID      string    `bson:"ClienteID" json:"cliente_id"`
-	DiaLancamento  int       `bson:"Dia_lancamento" json:"dia_lancamento"`
-	DiaVencimento  int       `bson:"Dia_vencimento" json:"dia_vencimento"`
-	QtdParcelas    int       `bson:"Qdta_parcelas" json:"qtd_parcelas"`
+	DiaLancamento  int       `bson:"DiaLancamento" json:"dia_lancamento"`
+	DiaVencimento  int       `bson:"DiaVencimento" json:"dia_vencimento"`
+	QtdParcelas    int       `bson:"QtdParcelas" json:"qtd_parcelas"`
 	CentroCustoID  string    `bson:"CentroCusto" json:"centro_custo"`
 	ValorOperacao  float64   `bson:"ValorOperacao" json:"valor_operacao"`
 	EmitidoEsteMes bool      `bson:"EmitidoEsteMes" json:"emitido_este_mes"`
