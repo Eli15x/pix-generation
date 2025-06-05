@@ -101,7 +101,7 @@ func main() {
 		protected.POST("/signature", signatureHandler.CreateSignature)
 		protected.GET("/signature/id/:id", signatureHandler.GetSignatureByID)
 		protected.GET("/signature", signatureHandler.GetAllSignature)
-		protected.PUT("/signature/id/:id", signatureHandler.UpdateSignature)
+		protected.PUT("/signature", signatureHandler.UpdateSignature)
 		protected.DELETE("/signature", signatureHandler.DeleteSignature)
 		protected.POST("/signature/cliente", signatureHandler.GetSignatureByClienteID)
 

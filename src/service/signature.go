@@ -12,7 +12,6 @@ import (
 
 	"github.com/fatih/structs"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var (
@@ -24,7 +23,7 @@ type ServiceSignature interface {
 	CreateSignature(ctx context.Context, signature model.SignatureReceive) error
 	GetSignatureByID(ctx context.Context, id string) (model.Signature, error)
 	GetAllSignature(ctx context.Context) ([]model.Signature, error)
-	UpdateSignature(ctx context.Context, id string, update model.SignatureReceive) error
+	UpdateSignature(ctx context.Context, update model.Signature) error
 	DeleteSignature(ctx context.Context, id string) error
 	GetSignatureByClienteID(ctx context.Context, clienteID string) ([]model.Signature, error)
 }
@@ -84,26 +83,22 @@ func (s *Signature) GetAllSignature(ctx context.Context) ([]model.Signature, err
 	return signatures, nil
 }
 
-func (s *Signature) UpdateSignature(ctx context.Context, id string, update model.SignatureReceive) error {
-	centroCustoObjectID, err := primitive.ObjectIDFromHex(update.CentroCustoID)
-	if err != nil {
-		return errors.New("Update Signature: invalid CentroCustoID")
-	}
+func (s *Signature) UpdateSignature(ctx context.Context, update model.Signature) error {
 
-	filter := bson.M{"signatureID": id}
+	filter := bson.M{"signatureID": update.SignatureID}
 	updateData := bson.M{
 		"$set": bson.M{
 			"clienteID":      update.ClienteID,
 			"dia_lancamento": update.DiaLancamento,
 			"dia_vencimento": update.DiaVencimento,
 			"qdta_parcelas":  update.QtdParcelas,
-			"centroCusto":    centroCustoObjectID,
+			"centroCusto":    update.CentroCustoID,
 			"valorOperacao":  update.ValorOperacao,
 			"updatedAt":      time.Now(),
 		},
 	}
 
-	_, err = client.GetInstance().UpdateOne(ctx, "Signature", filter, updateData)
+	_, err := client.GetInstance().UpdateOne(ctx, "Signature", filter, updateData)
 	if err != nil {
 		return errors.New("Update Signature: problem to update in MongoDB")
 	}

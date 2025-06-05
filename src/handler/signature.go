@@ -124,13 +124,22 @@ func (h *SignatureHandler) GetAllSignature(c *gin.Context) {
 // @Failure      500 {object}  map[string]string
 // @Router       /signature/id/{id} [put]
 func (h *SignatureHandler) UpdateSignature(c *gin.Context) {
-	id := c.Param("id")
-	var req model.SignatureReceive
+	var req model.Signature
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.UpdateSignature(context.Background(), id, req)
+	_, err := h.expenseCenterService.GetExpenseCenterByID(context.Background(), req.CentroCustoID)
+	if err != nil {
+		if err.Error() == "Get ExpenseCenter: not exists expenseCenter with this id" {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Centro Custo não encontrado"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = h.service.UpdateSignature(context.Background(), req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
