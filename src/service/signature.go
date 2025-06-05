@@ -85,16 +85,18 @@ func (s *Signature) GetAllSignature(ctx context.Context) ([]model.Signature, err
 
 func (s *Signature) UpdateSignature(ctx context.Context, update model.Signature) error {
 
-	filter := bson.M{"signatureID": update.SignatureID}
+	filter := bson.M{"SignatureID": update.SignatureID}
 	updateData := bson.M{
 		"$set": bson.M{
-			"clienteID":      update.ClienteID,
-			"dia_lancamento": update.DiaLancamento,
-			"dia_vencimento": update.DiaVencimento,
-			"qdta_parcelas":  update.QtdParcelas,
-			"centroCusto":    update.CentroCustoID,
-			"valorOperacao":  update.ValorOperacao,
-			"updatedAt":      time.Now(),
+			"ClienteID":      update.ClienteID,
+			"DiaLancamento":  update.DiaLancamento,
+			"DiaVencimento":  update.DiaVencimento,
+			"QtdParcelas":    update.QtdParcelas,
+			"CentroCusto":    update.CentroCustoID,
+			"ValorOperacao":  update.ValorOperacao,
+			"EmitidoEsteMes": update.EmitidoEsteMes,
+			"VencidoEsteMes": update.VencidoEsteMes,
+			"UpdatedAt":      time.Now(),
 		},
 	}
 
