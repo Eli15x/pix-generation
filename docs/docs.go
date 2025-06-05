@@ -2465,6 +2465,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "API para controle de usuários e invoices com autenticação JWT.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {
