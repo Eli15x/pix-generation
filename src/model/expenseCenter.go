@@ -7,12 +7,15 @@ import (
 type ExpenseCenter struct {
 	CentroExpenseID string    `bson:"CentroExpenseID" json:"centroExpense_id"`
 	NomeCentro      string    `bson:"NomeCentro" json:"nome_centro"`
+	UserID          string    `bson:"UserID" json:"user_id"`
 	CreatedAt       time.Time `bson:"CreatedAt" json:"created_at"`
 	UpdatedAt       time.Time `bson:"UpdatedAt" json:"updated_at"`
 }
 
 type ExpenseCenterReceive struct {
-	NomeCentro string `json:"nome_centro" example:"Administrativo"`
+	CentroExpenseID string `json:"centroExpense_id"`
+	NomeCentro      string `json:"nome_centro" example:"Administrativo"`
+	UserID          string `json:"user_id" binding:"required"`
 }
 
 type ExpenseCenterDeleteRequest struct {

@@ -2055,6 +2055,9 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
                 }
             }
         },
@@ -2069,10 +2072,19 @@ const docTemplate = `{
         },
         "model.ExpenseCenterReceive": {
             "type": "object",
+            "required": [
+                "user_id"
+            ],
             "properties": {
+                "centroExpense_id": {
+                    "type": "string"
+                },
                 "nome_centro": {
                     "type": "string",
                     "example": "Administrativo"
+                },
+                "user_id": {
+                    "type": "string"
                 }
             }
         },

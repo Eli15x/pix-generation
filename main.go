@@ -68,7 +68,7 @@ func main() {
 	signatureHandler := handler.NewSignatureHandler(signatureService, clientService, expenseCenterService)
 	operacaoHandler := handler.NewOperacaoHandler(operacaoService)
 	usuarioHandler := handler.NewUsuarioHandler(usuarioService)
-	expenseCenterHandler := handler.NewExpenseCenterHandler(expenseCenterService)
+	expenseCenterHandler := handler.NewExpenseCenterHandler(expenseCenterService, userService)
 
 	// Rotas públicas
 	r.POST("/login", userHandler.ValidateUser)
@@ -122,8 +122,8 @@ func main() {
 
 		protected.POST("/expensecenter", expenseCenterHandler.CreateExpenseCenter)
 		protected.GET("/expensecenter/id/:id", expenseCenterHandler.GetExpenseCenterByID)
-		protected.PUT("/expensecenter/id/:id", expenseCenterHandler.UpdateExpenseCenter)
-		protected.DELETE("/expensecenter/id/:id", expenseCenterHandler.DeleteExpenseCenter)
+		protected.PUT("/expensecenter", expenseCenterHandler.UpdateExpenseCenter)
+		protected.DELETE("/expensecenter", expenseCenterHandler.DeleteExpenseCenter)
 		protected.GET("/expensecenter", expenseCenterHandler.GetAllExpenseCenter)
 
 	}

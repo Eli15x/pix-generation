@@ -12,12 +12,16 @@ import (
 
 // ExpenseCenterHandler trata rotas de centro de custo
 type ExpenseCenterHandler struct {
-	service service.ServiceExpenseCenter
+	service     service.ServiceExpenseCenter
+	serviceUser service.ServiceUser
 }
 
 // NewExpenseCenterHandler injeta a dependência do service
-func NewExpenseCenterHandler(s service.ServiceExpenseCenter) *ExpenseCenterHandler {
-	return &ExpenseCenterHandler{service: s}
+func NewExpenseCenterHandler(s service.ServiceExpenseCenter, su service.ServiceUser) *ExpenseCenterHandler {
+	return &ExpenseCenterHandler{
+		service:     s,
+		serviceUser: su,
+	}
 }
 
 // CreateExpenseCenter godoc
@@ -37,7 +41,19 @@ func (h *ExpenseCenterHandler) CreateExpenseCenter(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.CreateExpenseCenter(context.Background(), ec)
+
+	_, err := h.serviceUser.GetUserByID(context.Background(), ec.UserID)
+	if err != nil {
+		if err.Error() == "GetUserByID: not exists user with this id" {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Usuário não encontrado"})
+			return
+		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = h.service.CreateExpenseCenter(context.Background(), ec)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -63,24 +79,6 @@ func (h *ExpenseCenterHandler) GetExpenseCenterByID(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, center)
-}
-
-// GetAllClient godoc
-// @Summary Busca todos os clientes
-// @Description Retorna todos os clientes
-// @Tags client
-// @Accept json
-// @Produce json
-// @Success 200 {array} model.Client
-// @Failure 500 {object} map[string]string
-// @Router /client [get]
-func (h *ClientHandler) GetAllExpenseCenter(c *gin.Context) {
-	centers, err := h.service.GetAllClient(context.Background())
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, centers)
 }
 
 // GetExpenseCenterByID godoc
@@ -140,7 +138,6 @@ func (h *ExpenseCenterHandler) DeleteExpenseCenter(c *gin.Context) {
 // @Failure      500  {object}  map[string]string
 // @Router       /expense-center/id/{id} [put]
 func (h *ExpenseCenterHandler) UpdateExpenseCenter(c *gin.Context) {
-	id := c.Param("id")
 
 	var update model.ExpenseCenterReceive
 	if err := c.ShouldBindJSON(&update); err != nil {
@@ -148,7 +145,20 @@ func (h *ExpenseCenterHandler) UpdateExpenseCenter(c *gin.Context) {
 		return
 	}
 
-	err := h.service.UpdateExpenseCenter(context.Background(), id, update)
+	if update.UserID != "" {
+		_, err := h.serviceUser.GetUserByID(context.Background(), update.UserID)
+		if err != nil {
+			if err.Error() == "GetUserByID: not exists user with this id" {
+				c.JSON(http.StatusNotFound, gin.H{"error": "Usuário não encontrado"})
+				return
+			}
+
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+	}
+
+	err := h.service.UpdateExpenseCenter(context.Background(), update.CentroExpenseID, update)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

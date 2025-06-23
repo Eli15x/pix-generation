@@ -68,6 +68,8 @@ definitions:
         type: string
       updated_at:
         type: string
+      user_id:
+        type: string
     type: object
   model.ExpenseCenterDeleteRequest:
     properties:
@@ -77,9 +79,15 @@ definitions:
     type: object
   model.ExpenseCenterReceive:
     properties:
+      centroExpense_id:
+        type: string
       nome_centro:
         example: Administrativo
         type: string
+      user_id:
+        type: string
+    required:
+    - user_id
     type: object
   model.Invoice:
     properties:

@@ -22,7 +22,7 @@ var (
 type ServiceExpenseCenter interface {
 	CreateExpenseCenter(ctx context.Context, expense model.ExpenseCenterReceive) error
 	GetExpenseCenterByID(ctx context.Context, id string) (model.ExpenseCenter, error)
-	UpdateExpenseCenter(ctx context.Context, id string, update model.ExpenseCenterReceive) error
+	UpdateExpenseCenter(ctx context.Context, id string, req model.ExpenseCenterReceive) error
 	DeleteExpenseCenter(ctx context.Context, id string) error
 	GetAllExpenseCenter(ctx context.Context) ([]model.ExpenseCenter, error)
 }
@@ -40,6 +40,7 @@ func (e *ExpenseCenter) CreateExpenseCenter(ctx context.Context, ec model.Expens
 	expense := model.ExpenseCenter{
 		CentroExpenseID: utils.CreateCodeId(),
 		NomeCentro:      ec.NomeCentro,
+		UserID:          ec.UserID,
 		CreatedAt:       time.Now(),
 		UpdatedAt:       time.Now(),
 	}
@@ -67,19 +68,30 @@ func (e *ExpenseCenter) GetExpenseCenterByID(ctx context.Context, id string) (mo
 	return expense, nil
 }
 
-func (e *ExpenseCenter) UpdateExpenseCenter(ctx context.Context, id string, update model.ExpenseCenterReceive) error {
+func (e *ExpenseCenter) UpdateExpenseCenter(ctx context.Context, id string, req model.ExpenseCenterReceive) error {
 	filter := bson.M{"CentroExpenseID": id}
-	updateData := bson.M{
-		"$set": bson.M{
-			"nomeCentro": update.NomeCentro,
-			"updatedAt":  time.Now(),
-		},
+
+	set := bson.M{}
+	if req.NomeCentro != "" {
+		set["NomeCentro"] = req.NomeCentro
+	}
+	if req.UserID != "" {
+		set["UserID"] = req.UserID
 	}
 
-	_, err := client.GetInstance().UpdateOne(ctx, "ExpenseCenter", filter, updateData)
+	if len(set) == 0 {
+		return errors.New("nenhum campo válido para atualizar")
+	}
+
+	set["UpdatedAt"] = time.Now()
+
+	_, err := client.GetInstance().
+		UpdateOne(ctx, "ExpenseCenter", filter, bson.M{"$set": set})
+
 	if err != nil {
 		return errors.New("Update ExpenseCenter: problem to update in MongoDB")
 	}
+
 	return nil
 }
 
