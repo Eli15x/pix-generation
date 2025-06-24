@@ -21,3 +21,7 @@ type ExpenseCenterReceive struct {
 type ExpenseCenterDeleteRequest struct {
 	CentroExpenseID string `json:"id" example:"647a8f9c0bde123456789abc"`
 }
+
+type ExpenseCenterUserRequest struct {
+	UserID string `json:"user_id" example:"647a8f9c0bde123456789abc"`
+}

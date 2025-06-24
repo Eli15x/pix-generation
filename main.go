@@ -122,6 +122,7 @@ func main() {
 
 		protected.POST("/expensecenter", expenseCenterHandler.CreateExpenseCenter)
 		protected.GET("/expensecenter/id/:id", expenseCenterHandler.GetExpenseCenterByID)
+		protected.GET("/expensecenter/user", expenseCenterHandler.GetExpenseCenterByUserID)
 		protected.PUT("/expensecenter", expenseCenterHandler.UpdateExpenseCenter)
 		protected.DELETE("/expensecenter", expenseCenterHandler.DeleteExpenseCenter)
 		protected.GET("/expensecenter", expenseCenterHandler.GetAllExpenseCenter)

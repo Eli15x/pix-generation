@@ -81,6 +81,30 @@ func (h *ExpenseCenterHandler) GetExpenseCenterByID(c *gin.Context) {
 	c.JSON(http.StatusOK, center)
 }
 
+// GetExpenseCenterByUserID godoc
+// @Summary      Busca centro de custo
+// @Description  Retorna centro de custo por User ID
+// @Tags         expense_centers
+// @Accept       json
+// @Produce      json
+// @Param        user_id  body  model.ExpenseCenterUserRequest  true  "UserID"
+// @Success      200 {object}  model.ExpenseCenter
+// @Failure      404 {object}  map[string]string
+// @Router       /expense-center/user [get]
+func (h *ExpenseCenterHandler) GetExpenseCenterByUserID(c *gin.Context) {
+	var req model.ExpenseCenterUserRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	center, err := h.service.GetExpenseCenterByUserID(context.Background(), req.UserID)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, center)
+}
+
 // GetExpenseCenterByID godoc
 // @Summary      Busca centro de custo
 // @Description  Retorna centro de custo por ID

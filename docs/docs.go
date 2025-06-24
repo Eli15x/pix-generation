@@ -536,6 +536,49 @@ const docTemplate = `{
                 }
             }
         },
+        "/expense-center/user": {
+            "get": {
+                "description": "Retorna centro de custo por User ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "expense_centers"
+                ],
+                "summary": "Busca centro de custo",
+                "parameters": [
+                    {
+                        "description": "UserID",
+                        "name": "user_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ExpenseCenterUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.ExpenseCenter"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/invoice": {
             "post": {
                 "description": "Cria uma nova fatura a partir dos dados fornecidos",
@@ -2085,6 +2128,15 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "string"
+                }
+            }
+        },
+        "model.ExpenseCenterUserRequest": {
+            "type": "object",
+            "properties": {
+                "user_id": {
+                    "type": "string",
+                    "example": "647a8f9c0bde123456789abc"
                 }
             }
         },

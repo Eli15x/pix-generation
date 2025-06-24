@@ -89,6 +89,12 @@ definitions:
     required:
     - user_id
     type: object
+  model.ExpenseCenterUserRequest:
+    properties:
+      user_id:
+        example: 647a8f9c0bde123456789abc
+        type: string
+    type: object
   model.Invoice:
     properties:
       amount:
@@ -688,6 +694,34 @@ paths:
               type: string
             type: object
       summary: Atualiza centro de custo
+      tags:
+      - expense_centers
+  /expense-center/user:
+    get:
+      consumes:
+      - application/json
+      description: Retorna centro de custo por User ID
+      parameters:
+      - description: UserID
+        in: body
+        name: user_id
+        required: true
+        schema:
+          $ref: '#/definitions/model.ExpenseCenterUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ExpenseCenter'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Busca centro de custo
       tags:
       - expense_centers
   /invoice:
