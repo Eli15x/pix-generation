@@ -22,7 +22,7 @@ var (
 type ServiceExpenseCenter interface {
 	CreateExpenseCenter(ctx context.Context, expense model.ExpenseCenterReceive) error
 	GetExpenseCenterByID(ctx context.Context, id string) (model.ExpenseCenter, error)
-	GetExpenseCenterByUserID(ctx context.Context, id string) (model.ExpenseCenter, error)
+	GetExpenseCenterByUserID(ctx context.Context, id string) ([]model.ExpenseCenter, error)
 	UpdateExpenseCenter(ctx context.Context, id string, req model.ExpenseCenterReceive) error
 	DeleteExpenseCenter(ctx context.Context, id string) error
 	GetAllExpenseCenter(ctx context.Context) ([]model.ExpenseCenter, error)
@@ -54,17 +54,17 @@ func (e *ExpenseCenter) CreateExpenseCenter(ctx context.Context, ec model.Expens
 	return nil
 }
 
-func (e *ExpenseCenter) GetExpenseCenterByUserID(ctx context.Context, id string) (model.ExpenseCenter, error) {
-	var expense model.ExpenseCenter
+func (e *ExpenseCenter) GetExpenseCenterByUserID(ctx context.Context, id string) ([]model.ExpenseCenter, error) {
+	var expense []model.ExpenseCenter
 	filter := map[string]interface{}{"UserID": id}
 
-	expense, err := repository.GetInstanceExpenseCenter().FindOne(ctx, "ExpenseCenter", filter)
+	expense, err := repository.GetInstanceExpenseCenter().Find(ctx, "ExpenseCenter", filter)
 	if err != nil {
 		return expense, errors.New("Get ExpenseCenter: problem to find by UserID")
 	}
 
-	if expense == (model.ExpenseCenter{}) {
-		return model.ExpenseCenter{}, errors.New("Get ExpenseCenter: not exists expenseCenter with this UserID")
+	if expense == nil {
+		return []model.ExpenseCenter{}, errors.New("Get ExpenseCenter: not exists expenseCenter with this UserID")
 	}
 	return expense, nil
 }
