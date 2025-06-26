@@ -7,12 +7,12 @@ import (
 type Client struct {
 	ClientID  string    `bson:"ClientID,omitempty" json:"client_id,omitempty"`
 	UserID    string    `bson:"UserID" json:"user_id"`
-	Nome      string    `bson:"nome" json:"nome"`
-	CPF       string    `bson:"cpf" json:"cpf"`
-	Email     string    `bson:"email" json:"email"`
-	Celular   string    `bson:"celular" json:"celular"`
-	CreatedAt time.Time `bson:"createdAt" json:"created_at"`
-	UpdatedAt time.Time `bson:"updatedAt" json:"updated_at"`
+	Nome      string    `bson:"Nome" json:"nome"`
+	CPF       string    `bson:"Cpf" json:"cpf"`
+	Email     string    `bson:"Email" json:"email"`
+	Celular   string    `bson:"Celular" json:"celular"`
+	CreatedAt time.Time `bson:"CreatedAt" json:"created_at"`
+	UpdatedAt time.Time `bson:"UpdatedAt" json:"updated_at"`
 }
 
 type ClientReceive struct {

@@ -98,14 +98,14 @@ func (c *Client) GetAllClient(ctx context.Context) ([]model.Client, error) {
 }
 
 func (c *Client) UpdateClient(ctx context.Context, id string, update model.ClientReceive) error {
-	filter := bson.M{"clientID": id}
+	filter := bson.M{"ClientID": id}
 	updateData := bson.M{
 		"$set": bson.M{
-			"nome":      update.Nome,
-			"cpf":       update.CPF,
-			"email":     update.Email,
-			"celular":   update.Celular,
-			"updatedAt": time.Now(),
+			"Nome":      update.Nome,
+			"Cpf":       update.CPF,
+			"Email":     update.Email,
+			"Celular":   update.Celular,
+			"UpdatedAt": time.Now(),
 		},
 	}
 
