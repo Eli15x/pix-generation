@@ -72,13 +72,13 @@ func (u *Usuario) UpdateUsuario(ctx context.Context, id string, usuario model.Us
 	updateData := bson.M{
 		"$set": bson.M{
 			"UserID":  usuario.UserID,
-			"nome":    usuario.Nome,
-			"email":   usuario.Email,
-			"senha":   usuario.Senha,
-			"nivel":   usuario.Nivel,
-			"setor":   usuario.Setor,
-			"celular": usuario.Celular,
-			"loja":    usuario.Loja,
+			"Nome":    usuario.Nome,
+			"Email":   usuario.Email,
+			"Senha":   usuario.Senha,
+			"Nivel":   usuario.Nivel,
+			"Setor":   usuario.Setor,
+			"Celular": usuario.Celular,
+			"Loja":    usuario.Loja,
 		},
 	}
 

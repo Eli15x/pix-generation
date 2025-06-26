@@ -3,13 +3,13 @@ package model
 type Usuario struct {
 	UsuarioID string `bson:"UsuarioID" json:"usuario_id"`
 	UserID    string `bson:"UserID" json:"user_id"`
-	Nome      string `bson:"nome" json:"nome"`
-	Email     string `bson:"email" json:"email"`
-	Senha     string `bson:"senha" json:"senha"`
-	Nivel     int    `bson:"nivel" json:"nivel"`
-	Setor     string `bson:"setor" json:"setor"`
-	Celular   string `bson:"celular" json:"celular"`
-	Loja      string `bson:"loja" json:"loja"`
+	Nome      string `bson:"Nome" json:"nome"`
+	Email     string `bson:"Email" json:"email"`
+	Senha     string `bson:"Senha" json:"senha"`
+	Nivel     int    `bson:"Nivel" json:"nivel"`
+	Setor     string `bson:"Setor" json:"setor"`
+	Celular   string `bson:"Celular" json:"celular"`
+	Loja      string `bson:"Loja" json:"loja"`
 }
 
 type UsuarioReceive struct {
