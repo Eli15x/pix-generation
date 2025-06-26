@@ -102,7 +102,7 @@ func (c *Client) UpdateClient(ctx context.Context, id string, update model.Clien
 	updateData := bson.M{
 		"$set": bson.M{
 			"Nome":      update.Nome,
-			"Cpf":       update.CPF,
+			"CPF":       update.CPF,
 			"Email":     update.Email,
 			"Celular":   update.Celular,
 			"UpdatedAt": time.Now(),
