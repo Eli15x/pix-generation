@@ -8,7 +8,7 @@ type Client struct {
 	ClientID  string    `bson:"ClientID,omitempty" json:"client_id,omitempty"`
 	UserID    string    `bson:"UserID" json:"user_id"`
 	Nome      string    `bson:"Nome" json:"nome"`
-	CPF       string    `bson:"Cpf" json:"cpf"`
+	CPF       string    `bson:"CPF" json:"cpf"`
 	Email     string    `bson:"Email" json:"email"`
 	Celular   string    `bson:"Celular" json:"celular"`
 	CreatedAt time.Time `bson:"CreatedAt" json:"created_at"`
