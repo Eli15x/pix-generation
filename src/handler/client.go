@@ -204,3 +204,54 @@ func (h *ClientHandler) GetClientByCpf(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, client)
 }
+
+// GetClientByCidade godoc
+// @Summary Busca clientes por Cidade
+// @Description Retorna lista de clientes pela cidade
+// @Tags client
+// @Accept json
+// @Produce json
+// @Param client body model.ClientCidadeRequest true "Cidade do cliente"
+// @Success 200 {object} model.Client
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Router /client/cidade [post]
+func (h *ClientHandler) GetClientByCidade(c *gin.Context) {
+	var req model.ClientCidadeRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	client, err := h.service.GetClientByCidade(context.Background(), req.Cidade)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, client)
+}
+
+// GetClientByCpf godoc
+// @Summary Busca cliente por UF
+// @Description Retorna lista de clientes pela UF
+// @Tags client
+// @Accept json
+// @Produce json
+// @Param client body model.ClientUFRequest true "UF do cliente"
+// @Success 200 {object} model.Client
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Router /client/UF [post]
+func (h *ClientHandler) GetClientByUF(c *gin.Context) {
+	var req model.ClientUFRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	client, err := h.service.GetClientByUF(context.Background(), req.UF)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, client)
+}

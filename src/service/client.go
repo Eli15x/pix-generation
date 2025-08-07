@@ -27,6 +27,8 @@ type ServiceClient interface {
 	UpdateClient(ctx context.Context, id string, update model.ClientReceive) error
 	DeleteClient(ctx context.Context, id string) error
 	GetClientByCpf(ctx context.Context, cpf string) (model.Client, error)
+	GetClientByUF(ctx context.Context, uf string) ([]model.Client, error)
+	GetClientByCidade(ctx context.Context, cidade string) ([]model.Client, error)
 }
 
 type Client struct{}
@@ -47,6 +49,10 @@ func (c *Client) CreateClient(ctx context.Context, clientReceive model.ClientRec
 	clientStruct.CPF = clientReceive.CPF
 	clientStruct.Email = clientReceive.Email
 	clientStruct.Celular = clientReceive.Celular
+	clientStruct.Rua = clientReceive.Rua
+	clientStruct.CEP = clientReceive.CEP
+	clientStruct.UF = clientReceive.UF
+	clientStruct.Cidade = clientReceive.Cidade
 	clientStruct.CreatedAt = time.Now()
 	clientStruct.UpdatedAt = time.Now()
 
@@ -101,10 +107,15 @@ func (c *Client) UpdateClient(ctx context.Context, id string, update model.Clien
 	filter := bson.M{"ClientID": id}
 	updateData := bson.M{
 		"$set": bson.M{
-			"Nome":      update.Nome,
-			"CPF":       update.CPF,
-			"Email":     update.Email,
-			"Celular":   update.Celular,
+			"Nome":    update.Nome,
+			"CPF":     update.CPF,
+			"Email":   update.Email,
+			"Celular": update.Celular,
+			"CEP":     update.CEP,
+			"UF":      update.UF,
+			"Rua":     update.Rua,
+			"Cidade":  update.Cidade,
+
 			"UpdatedAt": time.Now(),
 		},
 	}
@@ -136,5 +147,35 @@ func (c *Client) GetClientByCpf(ctx context.Context, cpf string) (model.Client, 
 	if err != nil {
 		return client, errors.New("Get Client: problem to find by CPF")
 	}
+
+	return client, nil
+}
+
+func (c *Client) GetClientByCidade(ctx context.Context, cidade string) ([]model.Client, error) {
+	filter := map[string]interface{}{"Cidade": cidade}
+
+	client, err := repository.GetInstanceClient().Find(ctx, "Client", filter)
+	if err != nil {
+		return []model.Client{}, errors.New("Get Client: problem to find by CPF")
+	}
+
+	if client == nil {
+		return []model.Client{}, nil
+	}
+
+	return client, nil
+}
+func (c *Client) GetClientByUF(ctx context.Context, uf string) ([]model.Client, error) {
+	filter := map[string]interface{}{"UF": uf}
+
+	client, err := repository.GetInstanceClient().Find(ctx, "Client", filter)
+	if err != nil {
+		return client, errors.New("Get Client: problem to find by CPF")
+	}
+
+	if client == nil {
+		return []model.Client{}, nil
+	}
+
 	return client, nil
 }

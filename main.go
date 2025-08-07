@@ -96,6 +96,8 @@ func main() {
 		protected.PUT("/client/id/:id", clientHandler.UpdateClient)
 		protected.DELETE("/client", clientHandler.DeleteClient)
 		protected.POST("/client/cpf", clientHandler.GetClientByCpf)
+		protected.POST("/client/UF", clientHandler.GetClientByUF)
+		protected.POST("/client/cidade", clientHandler.GetClientByCidade)
 
 		// Signature
 		protected.POST("/signature", signatureHandler.CreateSignature)
