@@ -3,19 +3,58 @@ version: '3.8'
 services:
   app:
     build: .
+    command: go run main.go
     ports:
       - "9090:9090"
     volumes:
       - .:/app
     working_dir: /app
-    command: go run main.go
+    networks:
+      - monitoring
+    depends_on:
+      - otel-collector
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.8
+    container_name: clickhouse
+    environment:
+      CLICKHOUSE_DB: otel
+      CLICKHOUSE_USER: otel
+      CLICKHOUSE_PASSWORD: otelpwd
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+    ports:
+      - "8123:8123"   # HTTP
+      - "9000:9000"   # Native
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      # opcional: rode SQLs de criação na primeira subida
+      - ./clickhouse-init:/docker-entrypoint-initdb.d
+    networks:
+      - monitoring
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.99.0
+    container_name: otel-collector
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol/config.yaml:ro
+    depends_on:
+      - clickhouse
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
     networks:
       - monitoring
 
   prometheus:
     image: prom/prometheus
+    container_name: prometheus
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
     ports:
       - "9091:9090"
     networks:
@@ -23,10 +62,14 @@ services:
 
   grafana:
     image: grafana/grafana
+    container_name: grafana
     ports:
       - "3000:3000"
     networks:
       - monitoring
+
+volumes:
+  clickhouse_data:
 
 networks:
   monitoring:
