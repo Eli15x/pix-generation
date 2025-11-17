@@ -1,31 +1,28 @@
 package middleware
 
 import (
-  "context"
-  "log"
-  "go.opentelemetry.io/otel"
-  "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
-  sdktrace "go.opentelemetry.io/otel/sdk/trace"
-  "go.opentelemetry.io/otel/sdk/resource"
-  semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/otel/attribute"
 )
 
-func setupTracing(ctx context.Context) func(context.Context) error {
-  exp, err := otlptracehttp.New(ctx, otlptracehttp.WithEndpointURL(
-    getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://otel-collector:4318"),
-  ))
-  if err != nil { log.Fatal(err) }
+func OTelMetricsMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		start := time.Now()
+		c.Next()
+		elapsed := time.Since(start).Seconds()
 
-  res, _ := resource.New(ctx,
-    resource.WithAttributes(
-      semconv.ServiceNameKey.String(getenv("OTEL_SERVICE_NAME","pix-generation")),
-    ),
-  )
+		route := c.FullPath()
+		if route == "" { route = c.Request.URL.Path }
 
-  tp := sdktrace.NewTracerProvider(
-    sdktrace.WithResource(res),
-    sdktrace.WithBatcher(exp), // envia em batch!
-  )
-  otel.SetTracerProvider(tp)
-  return tp.Shutdown
+		attrs := []attribute.KeyValue{
+			attribute.String("http.route", route),
+			attribute.String("http.method", c.Request.Method),
+			attribute.Int("http.status_code", c.Writer.Status()),
+		}
+
+		ReqCounter.Add(c, 1, attrs...)
+		ReqLatencyHist.Record(c, elapsed, attrs...)
+	}
 }

@@ -49,14 +49,14 @@ func main() {
 	}
 	defer ch.Close()
 
+	shutdown, err := otelmetrics.InitOTELMetrics(context.Background())
+    if err != nil { log.Fatalf("OTel init failed: %v", err) }
+    defer shutdown(context.Background())
+
 	// Inicia o Gin
 	r := gin.Default()
 
-	shut := setupTracing(ctx)
-	defer shut(context.Background())
-
-	r := gin.Default()
-	r.Use(otelgin.Middleware(getenv("OTEL_SERVICE_NAME","pix-generation")))
+	r.Use(otelmetrics.OTelMetricsMiddleware())
 	//Prometheus
 	metrics.Init()
 	r.Use(metrics.PrometheusMiddleware())
@@ -66,6 +66,7 @@ func main() {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Injeção dos services
+	metricsService := service.GetInstanceMetrics()
 	userService := service.GetInstanceUser()
 	invoiceService := service.GetInstanceInvoice()
 	clientService := service.GetInstanceClient()
@@ -75,6 +76,7 @@ func main() {
 	expenseCenterService := service.GetInstanceExpenseCenter()
 
 	// Injeção dos handlers
+	metricsHandler := handler.NewMetricsHandler(MetricsService)
 	userHandler := handler.NewUserHandler(userService)
 	invoiceHandler := handler.NewInvoiceHandler(invoiceService)
 	clientHandler := handler.NewClientHandler(clientService, userService)
