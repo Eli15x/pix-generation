@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"time"
+  	"database/sql"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -41,9 +42,21 @@ func main() {
 		log.Fatalf("Erro ao conectar no MongoDB: %v", err)
 	}
 
+	// inicia CH
+	ch := client.GetClickHouseInstance()
+	if err := ch.Initialize(ctx); err != nil {
+		log.Fatalf("clickhouse init: %v", err)
+	}
+	defer ch.Close()
+
 	// Inicia o Gin
 	r := gin.Default()
 
+	shut := setupTracing(ctx)
+	defer shut(context.Background())
+
+	r := gin.Default()
+	r.Use(otelgin.Middleware(getenv("OTEL_SERVICE_NAME","pix-generation")))
 	//Prometheus
 	metrics.Init()
 	r.Use(metrics.PrometheusMiddleware())
