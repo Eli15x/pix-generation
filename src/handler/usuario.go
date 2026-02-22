@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 
 	"pix-generation/src/model"
@@ -37,7 +36,7 @@ func (h *UsuarioHandler) CreateUsuario(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.CreateUsuario(context.Background(), req)
+	err := h.service.CreateUsuario(c.Request.Context(), req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -58,7 +57,7 @@ func (h *UsuarioHandler) CreateUsuario(c *gin.Context) {
 // @Router       /usuario/id/{id} [get]
 func (h *UsuarioHandler) GetUsuarioByID(c *gin.Context) {
 	id := c.Param("id")
-	usuario, err := h.service.GetUsuarioByID(context.Background(), id)
+	usuario, err := h.service.GetUsuarioByID(c.Request.Context(), id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -76,7 +75,7 @@ func (h *UsuarioHandler) GetUsuarioByID(c *gin.Context) {
 // @Failure      500 {object}  map[string]string
 // @Router       /usuario [get]
 func (h *UsuarioHandler) GetAllUsuario(c *gin.Context) {
-	usuarios, err := h.service.GetAllUsuario(context.Background())
+	usuarios, err := h.service.GetAllUsuario(c.Request.Context())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -103,7 +102,7 @@ func (h *UsuarioHandler) UpdateUsuario(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.UpdateUsuario(context.Background(), id, req)
+	err := h.service.UpdateUsuario(c.Request.Context(), id, req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -128,7 +127,7 @@ func (h *UsuarioHandler) DeleteUsuario(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.DeleteUsuario(context.Background(), req.UsuarioID)
+	err := h.service.DeleteUsuario(c.Request.Context(), req.UsuarioID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -153,7 +152,7 @@ func (h *UsuarioHandler) GetUsuarioByEmail(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	usuario, err := h.service.GetUsuarioByEmail(context.Background(), req.Email)
+	usuario, err := h.service.GetUsuarioByEmail(c.Request.Context(), req.Email)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return

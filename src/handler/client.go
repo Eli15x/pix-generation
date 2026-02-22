@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 
 	"pix-generation/src/model"
@@ -41,7 +40,7 @@ func (h *ClientHandler) CreateClient(c *gin.Context) {
 		return
 	}
 
-	_, err := h.serviceUser.GetUserByID(context.Background(), req.UserID)
+	_, err := h.serviceUser.GetUserByID(c.Request.Context(), req.UserID)
 	if err != nil {
 		if err.Error() == "GetUserByID: not exists user with this id" {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Usuário não encontrado"})
@@ -52,7 +51,7 @@ func (h *ClientHandler) CreateClient(c *gin.Context) {
 		return
 	}
 
-	err = h.service.CreateClient(context.Background(), req)
+	err = h.service.CreateClient(c.Request.Context(), req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -77,7 +76,7 @@ func (h *ClientHandler) GetClientByID(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	client, err := h.service.GetClientByID(context.Background(), req.ID)
+	client, err := h.service.GetClientByID(c.Request.Context(), req.ID)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -102,7 +101,7 @@ func (h *ClientHandler) GetClientByUserID(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	client, err := h.service.GetClientByUserID(context.Background(), req.UserID)
+	client, err := h.service.GetClientByUserID(c.Request.Context(), req.UserID)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -120,7 +119,7 @@ func (h *ClientHandler) GetClientByUserID(c *gin.Context) {
 // @Failure 500 {object} map[string]string
 // @Router /client [get]
 func (h *ClientHandler) GetAllClient(c *gin.Context) {
-	clients, err := h.service.GetAllClient(context.Background())
+	clients, err := h.service.GetAllClient(c.Request.Context())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -147,7 +146,7 @@ func (h *ClientHandler) UpdateClient(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.UpdateClient(context.Background(), id, req)
+	err := h.service.UpdateClient(c.Request.Context(), id, req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -172,7 +171,7 @@ func (h *ClientHandler) DeleteClient(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.DeleteClient(context.Background(), req.ID)
+	err := h.service.DeleteClient(c.Request.Context(), req.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -197,7 +196,7 @@ func (h *ClientHandler) GetClientByCpf(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	client, err := h.service.GetClientByCpf(context.Background(), req.CPF)
+	client, err := h.service.GetClientByCpf(c.Request.Context(), req.CPF)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -222,7 +221,7 @@ func (h *ClientHandler) GetClientByCidade(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	client, err := h.service.GetClientByCidade(context.Background(), req.Cidade)
+	client, err := h.service.GetClientByCidade(c.Request.Context(), req.Cidade)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -248,7 +247,7 @@ func (h *ClientHandler) GetClientByUF(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	client, err := h.service.GetClientByUF(context.Background(), req.UF)
+	client, err := h.service.GetClientByUF(c.Request.Context(), req.UF)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 
 	"pix-generation/src/model"
@@ -44,7 +43,7 @@ func (h *SignatureHandler) CreateSignature(c *gin.Context) {
 		return
 	}
 
-	_, err := h.clientService.GetClientByID(context.Background(), req.ClienteID)
+	_, err := h.clientService.GetClientByID(c.Request.Context(), req.ClienteID)
 	if err != nil {
 		if err.Error() == "Get Client: not exists client with this id" {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Cliente não encontrado"})
@@ -54,7 +53,7 @@ func (h *SignatureHandler) CreateSignature(c *gin.Context) {
 		return
 	}
 
-	_, err = h.expenseCenterService.GetExpenseCenterByID(context.Background(), req.CentroCustoID)
+	_, err = h.expenseCenterService.GetExpenseCenterByID(c.Request.Context(), req.CentroCustoID)
 	if err != nil {
 		if err.Error() == "Get ExpenseCenter: not exists expenseCenter with this id" {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Centro Custo não encontrado"})
@@ -64,7 +63,7 @@ func (h *SignatureHandler) CreateSignature(c *gin.Context) {
 		return
 	}
 
-	err = h.service.CreateSignature(context.Background(), req)
+	err = h.service.CreateSignature(c.Request.Context(), req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -85,7 +84,7 @@ func (h *SignatureHandler) CreateSignature(c *gin.Context) {
 // @Router       /signature/id/{id} [get]
 func (h *SignatureHandler) GetSignatureByID(c *gin.Context) {
 	id := c.Param("id")
-	signature, err := h.service.GetSignatureByID(context.Background(), id)
+	signature, err := h.service.GetSignatureByID(c.Request.Context(), id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -103,7 +102,7 @@ func (h *SignatureHandler) GetSignatureByID(c *gin.Context) {
 // @Failure      500 {object}  map[string]string
 // @Router       /signature [get]
 func (h *SignatureHandler) GetAllSignature(c *gin.Context) {
-	signatures, err := h.service.GetAllSignature(context.Background())
+	signatures, err := h.service.GetAllSignature(c.Request.Context())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -129,7 +128,7 @@ func (h *SignatureHandler) UpdateSignature(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	_, err := h.expenseCenterService.GetExpenseCenterByID(context.Background(), req.CentroCustoID)
+	_, err := h.expenseCenterService.GetExpenseCenterByID(c.Request.Context(), req.CentroCustoID)
 	if err != nil {
 		if err.Error() == "Get ExpenseCenter: not exists expenseCenter with this id" {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Centro Custo não encontrado"})
@@ -139,7 +138,7 @@ func (h *SignatureHandler) UpdateSignature(c *gin.Context) {
 		return
 	}
 
-	err = h.service.UpdateSignature(context.Background(), req)
+	err = h.service.UpdateSignature(c.Request.Context(), req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -164,7 +163,7 @@ func (h *SignatureHandler) DeleteSignature(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.DeleteSignature(context.Background(), req.SignatureID)
+	err := h.service.DeleteSignature(c.Request.Context(), req.SignatureID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -189,7 +188,7 @@ func (h *SignatureHandler) GetSignatureByClienteID(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	signatures, err := h.service.GetSignatureByClienteID(context.Background(), req.ClienteID)
+	signatures, err := h.service.GetSignatureByClienteID(c.Request.Context(), req.ClienteID)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return

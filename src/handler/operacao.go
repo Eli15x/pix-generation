@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 
 	"pix-generation/src/model"
@@ -37,7 +36,7 @@ func (h *OperacaoHandler) CreateOperacao(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.CreateOperacao(context.Background(), req)
+	err := h.service.CreateOperacao(c.Request.Context(), req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -57,7 +56,7 @@ func (h *OperacaoHandler) CreateOperacao(c *gin.Context) {
 // @Router       /operacao/id/{id} [get]
 func (h *OperacaoHandler) GetOperacaoByID(c *gin.Context) {
 	id := c.Param("id")
-	operacao, err := h.service.GetOperacaoByID(context.Background(), id)
+	operacao, err := h.service.GetOperacaoByID(c.Request.Context(), id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -75,7 +74,7 @@ func (h *OperacaoHandler) GetOperacaoByID(c *gin.Context) {
 // @Failure      500 {object}  map[string]string
 // @Router       /operacao [get]
 func (h *OperacaoHandler) GetAllOperacao(c *gin.Context) {
-	operacoes, err := h.service.GetAllOperacao(context.Background())
+	operacoes, err := h.service.GetAllOperacao(c.Request.Context())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -102,7 +101,7 @@ func (h *OperacaoHandler) UpdateOperacao(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.UpdateOperacao(context.Background(), id, req)
+	err := h.service.UpdateOperacao(c.Request.Context(), id, req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -127,7 +126,7 @@ func (h *OperacaoHandler) DeleteOperacao(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.DeleteOperacao(context.Background(), req.OperacaoID)
+	err := h.service.DeleteOperacao(c.Request.Context(), req.OperacaoID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

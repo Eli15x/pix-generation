@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 
 	"pix-generation/src/model"
@@ -42,7 +41,7 @@ func (h *ExpenseCenterHandler) CreateExpenseCenter(c *gin.Context) {
 		return
 	}
 
-	_, err := h.serviceUser.GetUserByID(context.Background(), ec.UserID)
+	_, err := h.serviceUser.GetUserByID(c.Request.Context(), ec.UserID)
 	if err != nil {
 		if err.Error() == "GetUserByID: not exists user with this id" {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Usuário não encontrado"})
@@ -53,7 +52,7 @@ func (h *ExpenseCenterHandler) CreateExpenseCenter(c *gin.Context) {
 		return
 	}
 
-	err = h.service.CreateExpenseCenter(context.Background(), ec)
+	err = h.service.CreateExpenseCenter(c.Request.Context(), ec)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -73,7 +72,7 @@ func (h *ExpenseCenterHandler) CreateExpenseCenter(c *gin.Context) {
 // @Router       /expense-center/id/{id} [get]
 func (h *ExpenseCenterHandler) GetExpenseCenterByID(c *gin.Context) {
 	id := c.Param("id")
-	center, err := h.service.GetExpenseCenterByID(context.Background(), id)
+	center, err := h.service.GetExpenseCenterByID(c.Request.Context(), id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -97,7 +96,7 @@ func (h *ExpenseCenterHandler) GetExpenseCenterByUserID(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	center, err := h.service.GetExpenseCenterByUserID(context.Background(), req.UserID)
+	center, err := h.service.GetExpenseCenterByUserID(c.Request.Context(), req.UserID)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -116,7 +115,7 @@ func (h *ExpenseCenterHandler) GetExpenseCenterByUserID(c *gin.Context) {
 // @Failure      404 {object}  map[string]string
 // @Router       /expense-center/id/{id} [get]
 func (h *ExpenseCenterHandler) GetAllExpenseCenter(c *gin.Context) { //criar para pegar de todos
-	center, err := h.service.GetAllExpenseCenter(context.Background())
+	center, err := h.service.GetAllExpenseCenter(c.Request.Context())
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -141,7 +140,7 @@ func (h *ExpenseCenterHandler) DeleteExpenseCenter(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.service.DeleteExpenseCenter(context.Background(), req.CentroExpenseID)
+	err := h.service.DeleteExpenseCenter(c.Request.Context(), req.CentroExpenseID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -170,7 +169,7 @@ func (h *ExpenseCenterHandler) UpdateExpenseCenter(c *gin.Context) {
 	}
 
 	if update.UserID != "" {
-		_, err := h.serviceUser.GetUserByID(context.Background(), update.UserID)
+		_, err := h.serviceUser.GetUserByID(c.Request.Context(), update.UserID)
 		if err != nil {
 			if err.Error() == "GetUserByID: not exists user with this id" {
 				c.JSON(http.StatusNotFound, gin.H{"error": "Usuário não encontrado"})
@@ -182,7 +181,7 @@ func (h *ExpenseCenterHandler) UpdateExpenseCenter(c *gin.Context) {
 		}
 	}
 
-	err := h.service.UpdateExpenseCenter(context.Background(), update.CentroExpenseID, update)
+	err := h.service.UpdateExpenseCenter(c.Request.Context(), update.CentroExpenseID, update)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
