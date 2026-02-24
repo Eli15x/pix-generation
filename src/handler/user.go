@@ -66,7 +66,7 @@ func (h *UserHandler) ValidateUser(c *gin.Context) {
 // @Failure      400   {object}  map[string]string
 // @Failure      500   {object}  map[string]string
 // @Router       /register [post]
-func (h *UserHandler) CreateUser(c *gin.Context) {
+func (h *UserHandler) CreateUser(c *gin.Context) { //melhorar código excessivo reduzir
 	var user model.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -76,21 +76,44 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	ctx := c.Request.Context()
 
 	existingUser, err := h.service.GetUserByEmail(ctx, user.Email)
-	if err == nil && existingUser.Email != "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Já existe um usuário com esse e-mail"})
+	if err != nil {
+		var ae *apperrors.AppError
+		if errors.As(err, &ae) {
+			c.JSON(apperrors.HTTPStatus(err), ae.Public())
+			return
+		}
+		c.JSON(http.StatusInternalServerError, apperrors.ErrInternal.Public())
 		return
 	}
-
-	// Verifica se já existe um usuário com esse documento
-	existingUserByDocument, err := h.service.GetUserByDocument(ctx, user.Document)
-	if err == nil && existingUserByDocument.Document != "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Já existe um usuário com esse documento"})
+	if existingUser.Email != "" {
+		conflict := apperrors.New(apperrors.CodeConflict, "Já existe um usuário com esse e-mail")
+		c.JSON(apperrors.HTTPStatus(conflict), conflict.Public())
+		return
+	}
+	existingByDoc, err := h.service.GetUserByDocument(ctx, user.Document)
+	if err != nil {
+		var ae *apperrors.AppError
+		if errors.As(err, &ae) {
+			c.JSON(apperrors.HTTPStatus(err), ae.Public())
+			return
+		}
+		c.JSON(http.StatusInternalServerError, apperrors.ErrInternal.Public())
+		return
+	}
+	if existingByDoc.Document != "" {
+		conflict := apperrors.New(apperrors.CodeConflict, "Já existe um usuário com esse documento")
+		c.JSON(apperrors.HTTPStatus(conflict), conflict.Public())
 		return
 	}
 
 	response, err := h.service.CreateUser(ctx, user)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		var ae *apperrors.AppError
+		if errors.As(err, &ae) {
+			c.JSON(apperrors.HTTPStatus(err), ae.Public())
+			return
+		}
+		c.JSON(http.StatusInternalServerError, apperrors.ErrInternal.Public())
 		return
 	}
 
