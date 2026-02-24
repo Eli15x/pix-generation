@@ -1,0 +1,60 @@
+Dia 1 — Preparação e verificação
+
+Fazer build e rodar todos os testes: go test ./...
+Rodar go vet e golangci-lint (ou configurar se não existir)
+Verificar que context.Request.Context() já está aplicado em todos os handlers
+Critério: build limpo, lint rodando; lista de arquivos que precisam de mudanças.
+Dia 2 — Padronizar erros (sentinel/typed)
+
+Criar pacote errors (ex: internal/errors ou pkg/apperrors) com erros exportados e tipos (ErrNotFound, ErrConflict, ErrValidation, etc.)
+Substituir compares por string nos repositories/services por retorno desses erros
+Critério: repositories e services retornando erros sentinel; go vet/lint ok.
+Dia 3 — Tratar erros nos handlers e usar errors.Is/As
+
+Atualizar handlers para mapear errors.Is(err, apperrors.ErrNotFound) → 404, ErrValidation → 400, ErrConflict → 409, default → 500
+Remover qualquer lógica que dependa de err.Error() match
+Critério: handlers retornam códigos HTTP corretos via tests manuais; mensagens internas não vazam.
+Dia 4 — Corrigir rotas e Swagger/OpenAPI
+
+Revisar endpoints: remover bodies em GETs; alinhar parâmetros (path/query/body) no código e comentários godoc
+Regenerar/validar docs Swagger (swag init ou similar)
+Critério: Swagger corresponde ao comportamento real das rotas; GETs não esperam body.
+Day 5 — Validação de entrada
+
+Integrar go-playground/validator.v10
+Adicionar tags validate aos models relevantes (ex.: required, email, min)
+Criar middleware/auxiliar para retornar erros de validação padronizados
+Critério: entradas inválidas retornam 400 com mensagens claras; testes manuais cobrindo validações.
+Dia 6 — Padronizar respostas e status codes
+
+Definir envelope de resposta (ex.: { "data": ..., "error": ... }) e helper para enviar JSON
+Ajustar status codes: Create → 201 (com Location opcional), Delete → 204 quando sem body, Update → 200/204 conforme decisão
+Critério: handlers usam helper; endpoints criam/atualizam/deletam com status apropriados.
+Dia 7 — Logging estruturado e traces
+
+Adotar logger (uber/zap recomendado) e inicializar no main
+Adicionar request ID middleware (ou reutilizar tracing middleware) e propagar no contexto
+Substituir prints por logs com níveis (Info, Error, Debug)
+Critério: logs estruturados presentes; request_id/tracing aparece em logs.
+Dia 8 — Tests unitários e cobertura básica
+
+Escrever testes unitários para um par service+repository (sugerido: expenseCenter)
+Mock repository nas camadas superiores (usar gomock/testify)
+Alvo: ~70% de cobertura nas funções críticas
+Critério: testes passam localmente e cobrem casos happy-path + erros.
+Dia 9 — CI e qualidade
+
+Criar workflow GitHub Actions: checkout, go mod download, golangci-lint, go test -cover, go vet, build
+Bloquear merge se linter/tests falharem (branch protection)
+Critério: workflow executa com sucesso em PR; pipeline falha em caso de problemas.
+Dia 10 — Revisão final, docs e checklist de PR
+
+Revisar PRs pequenos por área (errors, handlers, validation, logging, tests)
+Atualizar README com requisitos, como rodar linter/tests e gerar docs
+Fazer deploy checklist (configs, env, migrations)
+Critério: PRs revisados; README atualizado; projeto pronto para revisão por outra pessoa.
+Extras/Backlog (após o plano)
+
+Implementar integração de tracing (OpenTelemetry)
+Testes de integração com DB (containerized)
+Melhorar mensagens de erro para usuários (i18n se necessário)

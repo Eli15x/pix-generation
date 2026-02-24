@@ -1,8 +1,10 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 	"pix-generation/src/model"
+	apperrors "pix-generation/src/pkg"
 	"pix-generation/src/service"
 
 	"github.com/gin-gonic/gin"
@@ -42,7 +44,12 @@ func (h *UserHandler) ValidateUser(c *gin.Context) {
 	ctx := c.Request.Context()
 	response, err := h.service.ValidateUser(ctx, user.Email, user.Password)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		var ae *apperrors.AppError
+		if errors.As(err, &ae) {
+			c.JSON(apperrors.HTTPStatus(err), ae.Public())
+			return
+		}
+		c.JSON(http.StatusInternalServerError, apperrors.ErrInternal.Public())
 		return
 	}
 	c.JSON(http.StatusOK, response)

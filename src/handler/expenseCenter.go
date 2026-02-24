@@ -78,6 +78,7 @@ func (h *ExpenseCenterHandler) GetExpenseCenterByID(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, center)
+
 }
 
 // GetExpenseCenterByUserID godoc
