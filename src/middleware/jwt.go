@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -10,9 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var jwtKey = []byte(os.Getenv("KEY_JWT"))
-
-func JWTMiddleware() gin.HandlerFunc {
+func JWTMiddleware(jwtKey []byte) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Extrai o token do cabeçalho Authorization
 		authHeader := c.GetHeader("Authorization")
@@ -40,7 +37,7 @@ func JWTMiddleware() gin.HandlerFunc {
 	}
 }
 
-func GenerateJWT(username string) (string, error) {
+func GenerateJWT(username string, jwtKey []byte) (string, error) {
 
 	expirationTime := time.Now().Add(36 * time.Hour) //expiração token 1h
 
@@ -52,6 +49,25 @@ func GenerateJWT(username string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	// Assina o token com a chave secreta
+	tokenString, err := token.SignedString(jwtKey)
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, nil
+}
+
+func GenerateJWTUUnlimited(username string, jwtKey []byte) (string, error) {
+
+	expirationTime := time.Now().Add(100 * 24 * time.Hour)
+
+	claims := &jwt.StandardClaims{
+		ExpiresAt: expirationTime.Unix(),
+		Subject:   username,
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
 	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {
 		return "", err

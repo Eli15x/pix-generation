@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -72,10 +73,19 @@ func main() {
 
 	// Rotas públicas
 	r.POST("/login", userHandler.ValidateUser)
-	r.POST("/register", userHandler.CreateUser)
+	r.GET("/getTokenUnlimited", userHandler.GetTokenUnlimited)
+
+	var jwtKeyAcessGroup = []byte(os.Getenv("KEY_JWT_ACESS_GROUP"))
+
+	adminAcessGroup := r.Group("/", middleware.JWTMiddleware(jwtKeyAcessGroup))
+	{
+		adminAcessGroup.POST("/register", userHandler.CreateUser)
+	}
+
+	var jwtKey = []byte(os.Getenv("KEY_JWT"))
 
 	// Rotas protegidas com JWT
-	protected := r.Group("/", middleware.JWTMiddleware())
+	protected := r.Group("/", middleware.JWTMiddleware(jwtKey))
 	{
 		protected.POST("/invoice", invoiceHandler.CreateInvoice)
 		protected.GET("/invoice/id/:id", invoiceHandler.GetByID)

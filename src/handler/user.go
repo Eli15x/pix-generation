@@ -3,9 +3,12 @@ package handler
 import (
 	"errors"
 	"net/http"
+	"os"
+	"pix-generation/src/middleware"
 	"pix-generation/src/model"
 	apperrors "pix-generation/src/pkg"
 	"pix-generation/src/service"
+	"pix-generation/src/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -53,6 +56,15 @@ func (h *UserHandler) ValidateUser(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, response)
+}
+
+func (h *UserHandler) GetTokenUnlimited(c *gin.Context) {
+	token, err := middleware.GenerateJWTUUnlimited(utils.CreateCodeId(), []byte(os.Getenv("KEY_JWT_ACESS_GROUP")))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate JWT"})
+		return
+	}
+	c.JSON(http.StatusOK, token)
 }
 
 // CreateUser godoc
