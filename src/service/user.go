@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"os"
 	"pix-generation/src/client"
 	"time"
 
@@ -74,7 +75,7 @@ func (u *user) ValidateUser(ctx context.Context, email string, password string) 
 	}
 
 	// Gera o token JWT após validação bem-sucedida
-	token, err := middleware.GenerateJWT(user.UserID)
+	token, err := middleware.GenerateJWT(user.UserID, []byte(os.Getenv("KEY_JWT")))
 	if err != nil {
 		return responseUser, errors.New("Failed to generate JWT")
 	}
@@ -188,7 +189,7 @@ func (u *user) CreateUser(ctx context.Context, user model.User) (model.ResponseU
 		return responseUser, errors.New("Create user: problem to insert into MongoDB")
 	}
 
-	token, err := middleware.GenerateJWT(user.UserID)
+	token, err := middleware.GenerateJWT(user.UserID, []byte(os.Getenv("KEY_JWT")))
 	if err != nil {
 		return responseUser, errors.New("Failed to generate JWT")
 	}
