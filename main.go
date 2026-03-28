@@ -73,7 +73,7 @@ func main() {
 
 	// Rotas públicas
 	r.POST("/login", userHandler.ValidateUser)
-	r.GET("/getTokenUnlimited", userHandler.GetTokenUnlimited)
+	//r.GET("/getTokenUnlimited", userHandler.GetTokenUnlimited)
 
 	var jwtKeyAcessGroup = []byte(os.Getenv("KEY_JWT_ACESS_GROUP"))
 
