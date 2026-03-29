@@ -54,3 +54,58 @@ func (h *AdminUserHandler) ValidateUser(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, response)
 }
+
+/*
+func (h *AdminUserHandler) CreateUser(c *gin.Context) {
+	var user model.AdminUser
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx := c.Request.Context()
+
+	existingUser, err := h.service.GetUserByEmail(ctx, user.Email)
+	if err != nil {
+		var ae *apperrors.AppError
+		if errors.As(err, &ae) {
+			c.JSON(apperrors.HTTPStatus(err), ae.Public())
+			return
+		}
+		c.JSON(http.StatusInternalServerError, apperrors.ErrInternal.Public())
+		return
+	}
+	if existingUser.Email != "" {
+		conflict := apperrors.New(apperrors.CodeConflict, "Já existe um usuário com esse e-mail")
+		c.JSON(apperrors.HTTPStatus(conflict), conflict.Public())
+		return
+	}
+	existingByDoc, err := h.service.GetUserByDocument(ctx, user.Document)
+	if err != nil {
+		var ae *apperrors.AppError
+		if errors.As(err, &ae) {
+			c.JSON(apperrors.HTTPStatus(err), ae.Public())
+			return
+		}
+		c.JSON(http.StatusInternalServerError, apperrors.ErrInternal.Public())
+		return
+	}
+	if existingByDoc.Document != "" {
+		conflict := apperrors.New(apperrors.CodeConflict, "Já existe um usuário com esse documento")
+		c.JSON(apperrors.HTTPStatus(conflict), conflict.Public())
+		return
+	}
+
+	response, err := h.service.CreateUser(ctx, user)
+	if err != nil {
+		var ae *apperrors.AppError
+		if errors.As(err, &ae) {
+			c.JSON(apperrors.HTTPStatus(err), ae.Public())
+			return
+		}
+		c.JSON(http.StatusInternalServerError, apperrors.ErrInternal.Public())
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
+} */

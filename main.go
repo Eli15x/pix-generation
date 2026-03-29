@@ -75,11 +75,17 @@ func main() {
 
 	var jwtKeyAcessGroup = []byte(os.Getenv("KEY_JWT_ACESS_GROUP"))
 	var jwtKey = []byte(os.Getenv("KEY_JWT"))
+	var jwtKeyDeveloperAcessGroup = []byte(os.Getenv("KEY_JWT_DEVELOPER_ACESS_GROUP"))
 
 	// Rotas públicas
 	r.POST("/login", userHandler.ValidateUser)
 	//r.GET("/getTokenUnlimited", userHandler.GetTokenUnlimited)
 	r.POST("/admin/login", adminUserHandler.ValidateUser)
+
+	/*developerAcessGroup := r.Group("/", middleware.JWTMiddleware(jwtKeyDeveloperAcessGroup))
+	{
+		developerAcessGroup.POST("/register/adminGroup", adminUserHandler.CreateUser)
+	}*/ //precisa dessa rota para criptografia da senha vai ser usada so pelos developers.
 
 	adminAcessGroup := r.Group("/", middleware.JWTMiddleware(jwtKeyAcessGroup))
 	{
