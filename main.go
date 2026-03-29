@@ -61,6 +61,7 @@ func main() {
 	operacaoService := service.GetInstanceOperacao()
 	usuarioService := service.GetInstanceUsuario()
 	expenseCenterService := service.GetInstanceExpenseCenter()
+	adminUserService := service.GetInstanceAdminUser()
 
 	// Injeção dos handlers
 	userHandler := handler.NewUserHandler(userService)
@@ -70,19 +71,20 @@ func main() {
 	operacaoHandler := handler.NewOperacaoHandler(operacaoService)
 	usuarioHandler := handler.NewUsuarioHandler(usuarioService)
 	expenseCenterHandler := handler.NewExpenseCenterHandler(expenseCenterService, userService)
+	adminUserHandler := handler.NewAdminUserHandler(adminUserService)
+
+	var jwtKeyAcessGroup = []byte(os.Getenv("KEY_JWT_ACESS_GROUP"))
+	var jwtKey = []byte(os.Getenv("KEY_JWT"))
 
 	// Rotas públicas
 	r.POST("/login", userHandler.ValidateUser)
 	//r.GET("/getTokenUnlimited", userHandler.GetTokenUnlimited)
-
-	var jwtKeyAcessGroup = []byte(os.Getenv("KEY_JWT_ACESS_GROUP"))
+	r.POST("/admin/login", adminUserHandler.ValidateUser)
 
 	adminAcessGroup := r.Group("/", middleware.JWTMiddleware(jwtKeyAcessGroup))
 	{
 		adminAcessGroup.POST("/register", userHandler.CreateUser)
 	}
-
-	var jwtKey = []byte(os.Getenv("KEY_JWT"))
 
 	// Rotas protegidas com JWT
 	protected := r.Group("/", middleware.JWTMiddleware(jwtKey))
