@@ -1,10 +1,14 @@
 package model
 
-type adminUser struct {
-	UserID   string `bson:"UserID,omitempty" json:"user_id,omitempty"`
-	Name     string `bson:"Name" json:"name"`
-	Email    string `bson:"Email" json:"email"`
-	Password string `bson:"Password" json:"password"`
+import "time"
+
+type AdminUser struct {
+	UserID    string    `bson:"UserID,omitempty" json:"user_id,omitempty"`
+	Name      string    `bson:"Name" json:"name"`
+	Email     string    `bson:"Email" json:"email"`
+	Password  string    `bson:"Password" json:"password"`
+	CreatedAt time.Time `bson:"CreatedAt" json:"createdAt"`
+	UpdatedAt time.Time `bson:"UpdatedAt" json:"updatedAt"`
 }
 
 type AdminResponseUser struct {

@@ -82,10 +82,12 @@ func main() {
 	//r.GET("/getTokenUnlimited", userHandler.GetTokenUnlimited)
 	r.POST("/admin/login", adminUserHandler.ValidateUser)
 
-	/*developerAcessGroup := r.Group("/", middleware.JWTMiddleware(jwtKeyDeveloperAcessGroup))
+	//criar rota para gerar token developer e depois apagar.  <------
+
+	developerAcessGroup := r.Group("/", middleware.JWTMiddleware(jwtKeyDeveloperAcessGroup))
 	{
 		developerAcessGroup.POST("/register/adminGroup", adminUserHandler.CreateUser)
-	}*/ //precisa dessa rota para criptografia da senha vai ser usada so pelos developers.
+	} //precisa dessa rota para criptografia da senha vai ser usada so pelos developers.
 
 	adminAcessGroup := r.Group("/", middleware.JWTMiddleware(jwtKeyAcessGroup))
 	{

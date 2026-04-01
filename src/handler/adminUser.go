@@ -55,7 +55,6 @@ func (h *AdminUserHandler) ValidateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-/*
 func (h *AdminUserHandler) CreateUser(c *gin.Context) {
 	var user model.AdminUser
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -76,22 +75,7 @@ func (h *AdminUserHandler) CreateUser(c *gin.Context) {
 		return
 	}
 	if existingUser.Email != "" {
-		conflict := apperrors.New(apperrors.CodeConflict, "Já existe um usuário com esse e-mail")
-		c.JSON(apperrors.HTTPStatus(conflict), conflict.Public())
-		return
-	}
-	existingByDoc, err := h.service.GetUserByDocument(ctx, user.Document)
-	if err != nil {
-		var ae *apperrors.AppError
-		if errors.As(err, &ae) {
-			c.JSON(apperrors.HTTPStatus(err), ae.Public())
-			return
-		}
-		c.JSON(http.StatusInternalServerError, apperrors.ErrInternal.Public())
-		return
-	}
-	if existingByDoc.Document != "" {
-		conflict := apperrors.New(apperrors.CodeConflict, "Já existe um usuário com esse documento")
+		conflict := apperrors.New(apperrors.CodeConflict, "Já existe um usuário administrativo com esse e-mail")
 		c.JSON(apperrors.HTTPStatus(conflict), conflict.Public())
 		return
 	}
@@ -108,4 +92,4 @@ func (h *AdminUserHandler) CreateUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response)
-} */
+}
